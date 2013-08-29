@@ -1,13 +1,14 @@
 classdef HashedRun < handle
-  %HASHEDRUN Summary of this class goes here
-  %   Detailed explanation goes here
+  %HashedRun: Manages a single run of Debam/Detim, whose output is sorted
+  %into folders deterministically via SHA-1.
+
   
   properties
     originMap %Map which is hashed
     configMap %Map conainer containing info for the model run
     %configText % Text which will be written 
     hash % hash of input.txt from config
-    model
+    model % fully qualified path ot model executeable
     outPath % Path where model will be outputing
     Lock %instance of impervious.lib.padlock.LockFile
     
@@ -17,8 +18,9 @@ classdef HashedRun < handle
   methods
     
     function hr = HashedRun(config, model)
-      % Object constructir function
-      % Args: config: a valid Model configuration 
+      % Object constructor function
+      % Args: config: a valid Model configuration
+      %      model: the fully-qualified path for the model executable
       
       hr.originMap = copy_map(config);
       hr.model = model;
@@ -68,9 +70,9 @@ classdef HashedRun < handle
     
     
     function [success, err] = genConfig(self)
-      %
+      % Generate this run's input.txt, and write it to disk.
       % Returns: success : success code is
-      %                      - 0 somthing wrong has gone
+      %                      - 0 something has gone wrong
       %                      - 1 config has been generated
       %                      - 2 config already existed
       
@@ -86,7 +88,7 @@ classdef HashedRun < handle
 
         p = self.configMap('outpath');
 
-        %make sure the outputr directory exists
+        %make sure the output directory exists
         if ~(exist(p, 'dir'))
           [s, e] = mkdir(p);
           if ~s
@@ -98,7 +100,8 @@ classdef HashedRun < handle
         end
 
         fileName = [self.outPath, 'input.txt'];
-
+        
+        %open our input.txt and write to disk
         [fid, msg] = fopen(fileName, 'w');
         if ~(fid == -1)
           success = 1;
@@ -116,10 +119,19 @@ classdef HashedRun < handle
     
     
     function [success, err] = runModel(self)
+      %Execute the model, checking to make sure that the model hasn't run
+      %already.
+      %Returns: - success: codes for completion are:
+      %                     - 0 : an error has occured
+      %                     - 2 : the lockfile indicates the model has
+      %                     already run
+      %          - err: error message.
+      %
+      %TODO: Add status code for a successfull completion
       switch self.runStatus
         case impervious.config.RunStatus.INPROGRESS
           success = 0;
-          err = 'Impervious:HashedRun:runModel: Model Run is Alreaty in Progress';
+          err = 'Impervious:HashedRun:runModel: Model Run is Already in Progress';
           return
         case impervious.config.RunStatus.RUNFINISHED
           success = 2;
@@ -142,6 +154,7 @@ classdef HashedRun < handle
       
       
       function [] = executeModel(self)
+        % Shanges the working path and executes the model, then goes back.
         self.setStatus('INPROGRESS');
         oldroot = pwd();
         cd(self.outPath);
@@ -154,6 +167,8 @@ classdef HashedRun < handle
     
     
     function setStatus(self, status)
+      %Set the lockfile's status, based on the enumeration found in
+      %impervious.config.
       self.Lock.setStatus(impervious.config.RunStatus.(status));
       self.runStatus = self.Lock.status;
     end
