@@ -10,9 +10,9 @@ v 0.0.1
 Usage
 -----
 
-To run the model multiple times the function ```modelMultiRun``` is availible.
+To run the model multiple times the function ```modelMultiRun``` is available.
 This function takes as arguments
-1. ```modelpath```: the full path to the model executeable (may be debam or detim),
+1. ```modelpath```: the full path to the model executable (may be debam or detim),
 2. ```basefile```: the full path to a valid ```input.txt```, which is used as a
 basis for each of the model runs
 3. ```varargin```: model parameters which will be changed for each run, written as
@@ -30,9 +30,9 @@ at the Matlab repl. Impervious will take the config file
 from ```/home/luser/work/hock_mass_balance/config/base_input.txt```
 and generate ```input.txt``` files which contain every combination of the parameters
 ```icekons``` and ```firnkons```, given the values you've assigned them
-(in this case there are four combinations).  To decrece the possiblilty
+(in this case there are four combinations).  To decrease the possibility
 that one run will overwrite another, each generated file is placed in a directory
-with name determied by the SHA-1 hash of the modified config file,
+with name determined by the SHA-1 hash of the modified config file,
 and the model's output is directed to that folder as well.
 This model run will result in a directory structure which looks like:
 
