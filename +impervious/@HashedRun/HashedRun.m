@@ -28,7 +28,7 @@ classdef HashedRun < handle
       confstr = impervious.lib.glazer.mapToDegrees(config);
       data = unicode2native(confstr);
       hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'bin');
-      hr.hash = DataHash(data, hashOpts);
+      hr.hash = impervious.lib.DataHash(data, hashOpts);
       
       % Use a tempfile to generate the SHA-1 hash of the config
       % text, sans hash
@@ -37,7 +37,7 @@ classdef HashedRun < handle
 %         fprintf(tmpfid, impervious.lib.glazer.mapToDegrees(config));
 %         tmpname = fopen(tmpfid)
 %         hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'file');
-%         hr.hash = DataHash(tmpname, hashOpts);
+%         hr.hash = impervious.lib.DataHash(tmpname, hashOpts);
 %         tmpfid = fclose(tmpname);
 %       else
 %         error('HashedRun:Issue with tempfile');
