@@ -9,5 +9,6 @@ enumeration
   NOTRUN (0)
   INPROGRESS (1)
   RUNFINISHED (2)
+  EXECUTIONERROR (3)
 end
 end

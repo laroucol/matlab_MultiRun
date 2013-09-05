@@ -1,4 +1,4 @@
-function runs = modelMultiRun(modelpath, basefile, varargin)
+function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefile, varargin)
 % function modelMultiRun
 %
 % Args: modelpath - fully qualified path to a model's executeable
@@ -8,7 +8,11 @@ function runs = modelMultiRun(modelpath, basefile, varargin)
 %       varargin - a list of key-value pairs which are modified, e.g.
 %           modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])
 %         will run the model with icekons set to each value in [5:0.1:6]
-% Returns: runs - a container.Maps indexed by hashes of HashedRun objects,
+% Returns: hashes - Cell array of hashes of each run
+%          status - staus(i) = Array of return status of run with hash hashes{i}
+%          err - Error messages associated by incomplete runs
+%          changes - array of changes made to input.txt
+%          runs - a container.Maps indexed by hashes of HashedRun objects,
 %           each corresponding to a single model run.
 
 
@@ -20,7 +24,11 @@ c = impervious.lib.glazer.degreeToMaps(s);
 combs = impervious.lib.allcomb.allcomb(vals{:});
 nCombs = size(combs);
 
-runs = containers.Map();
+hashes = cell(nCombs(1), 1);
+status = zeros(nCombs(1), 1);
+err = cell(nCombs(1), 1);
+changes = cell(nCombs(1), 1);
+runs = cell(nCombs(1), 1);
 
 for combo = 1:nCombs(1)
   msg = [];
@@ -34,11 +42,14 @@ for combo = 1:nCombs(1)
   header = sprintf('Base config file: %s \nNew config file: %sindex.txt\n',basefile, HR.outPath);
   msg = [header sprintf('Changes made:\n') msg];
   
-  
-  runs(HR.hash) = HR;
-  HR.runModel();
+  hashes{combo} = HR.hash;
+  [runsuccess, runerr] = HR.runModel();
   changefile = fopen([HR.outPath 'changes.txt'],'w');
   fprintf(changefile,'%s', msg);
   fclose(changefile);
+  status(combo) = runsuccess;
+  err{combo} = runerr;
+  changes{combo} = msg;
+  runs{combo} = HR;
 end 
 end

@@ -22,7 +22,7 @@ classdef HashedRun < handle
       % Args: config: a valid Model configuration
       %      model: the fully-qualified path for the model executable
       
-      hr.originMap = copy_map(config);
+      hr.originMap = config;
       hr.model = model;
       
       confstr = impervious.lib.glazer.mapToDegrees(config);
@@ -105,13 +105,14 @@ classdef HashedRun < handle
         [fid, msg] = fopen(fileName, 'w');
         if ~(fid == -1)
           success = 1;
-          fprintf(fid, '%s',impervious.lib.glazer.mapToDegrees(self.configMap));
+          str = impervious.lib.glazer.mapToDegrees(self.configMap);
+          fprintf(fid, '%s', str);
           fid = fclose(fid);
           self.setStatus('NOTRUN');
         else
           success = 0;
           self.setStatus('DOESNOTEXIST');
-          err = ('impervious.lib.glazer.HashedRun.genConfig:Error oening input.txt');
+          err = ('impervious.lib.glazer.HashedRun.genConfig:Error opening input.txt');
           return
         end
       end
@@ -123,6 +124,7 @@ classdef HashedRun < handle
       %already.
       %Returns: - success: codes for completion are:
       %                     - 0 : an error has occured
+      %                     - 1 : The model has been run successfully
       %                     - 2 : the lockfile indicates the model has
       %                     already run
       %          - err: error message.
@@ -135,17 +137,27 @@ classdef HashedRun < handle
           return
         case impervious.config.RunStatus.RUNFINISHED
           success = 2;
-          err = 'Impervious:HashedRun:runModel:Lockfile Indicates that model has already run';
+          err = 'Impervious:HashedRun:runModel:Lockfile indicates that model has already run';
           return
+        case impervious.config.RunStatus.EXECUTIONERROR
+          success = 0;
+          err = 'Impervious:HashedRun:runModel:Lockfile indicates that the model exited early. Check input.txt.';
         case impervious.config.RunStatus.DOESNOTEXIST
           [s, e] = self.genConfig();
           if ~s
             success = s;
-            err = ['impervious:HashedRun:runModel: Error :' err];
+            err = ['impervious:HashedRun:runModel: Error :' e];
             return
           else
-            executeModel(self);
+            [model_stat, res] = executeModel(self);
+            if ~model_stat
+              success = 1;
+              err = '';
+            else
+              success = 0;
+              err = ['impervious:HashedRun:runModel:ExecutionError: Model exited early citing:' res];
             return
+            end
           end
         case impervious.config.RunStatus.NOTRUN
           executeModel(self);
@@ -153,13 +165,17 @@ classdef HashedRun < handle
       end
       
       
-      function [] = executeModel(self)
+      function [status, result] = executeModel(self)
         % Shanges the working path and executes the model, then goes back.
         self.setStatus('INPROGRESS');
         oldroot = pwd();
         cd(self.outPath);
         [status,result] = system(self.model);
-        self.setStatus('RUNFINISHED');
+        if ~status
+          self.setStatus('RUNFINISHED');
+        else
+          self.setStatus('EXECUTIONERROR');
+        end
         cd(oldroot);
       end
       
