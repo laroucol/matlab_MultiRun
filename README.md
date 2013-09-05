@@ -57,7 +57,7 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
      runs = modelMultiRun("detim", "base_input.txt", "icekons", [5.0:0.1:6.0], "firnkons", [350:0.1:351]);
      ```
      This will result in one hundred model runs, wherein the configuration files passed to
-     DETIM are identical to ```base_input.txt```, except that icekons and firknos
+     DETIM are identical to ```base_input.txt```, except that icekons and firnkons
      have been changed to match the values passed to modelMultiRun, and with
      output directories determined by a hashing function. In all, 100
      runs will occur, corresponding to the 100 pairings of an element of ```[5.0:0.1:6.0]```
@@ -72,7 +72,7 @@ This is done by:
 - Modifying the ```outpath``` parameter of the ```containers.Map``` containing
   the configuration to ```<original-outpath>/<SHA hash>/outpath/```.
 
-MultiModelRuns returns several cell-arrays; entries with the same index correspond to the same model run
+MultiModelRun returns several cell-arrays; entries with the same index correspond to the same model run
   1. ```hashes```: the SHA-1 hash of the ```input.txt``` configuration files
   2. ```status```: Returned status of the model run.
   3. ```err```: Sting detailing any errors encountered; is empty if none occur
