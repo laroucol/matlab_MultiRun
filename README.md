@@ -4,7 +4,7 @@ Impervious
 A tool for running the Hock Melt models with various configurations
 from a base config file.
 
-v 0.0.4
+v 0.0.5
 -------
 
 Usage
