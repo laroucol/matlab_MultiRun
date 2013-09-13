@@ -20,7 +20,12 @@ s = fileread(basefile);
 c = impervious.lib.glazer.degreeToMaps(s);
 
 
-[kw , vals] = impervious.lib.wordplay.getKwargs(varargin{:});
+if isempty(varargin)
+  kw = {'none'};
+  vals = {0};
+else
+   [kw , vals] = impervious.lib.wordplay.getKwargs(varargin{:});
+end
 combs = impervious.lib.allcomb.allcomb(vals{:});
 nCombs = size(combs);
 
