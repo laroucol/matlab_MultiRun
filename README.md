@@ -1,15 +1,15 @@
-Impervious
+MultiRun
 ==========
 
 A tool for running the Hock Melt models with various configurations
 from a base config file.
 
-v 0.0.5
+v 0.0.6
 -------
 
 Usage
 ------
-Impervious provides a method for running the models over a range of
+MultiRun provides a method for running the models over a range of
 parameter values, as well as a helper class which manages each
 individual run of the model, and ensures that the model is not
 run more times than necessary.
@@ -39,7 +39,7 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
      binary is passed as ```modelpath```.
   2. A valid ```input.txt``` file for said model. The config
      should __not__ perform any of the optimization routines;
-     at the moment, Impervious is pretty stupid, and won't turn this off when it
+     at the moment, MultiRun is pretty stupid, and won't turn this off when it
      generates configuration files for the model. It's a good idea to set as many
      parameters as possible in this file to the ones you'd like them to be
      in any single run of the model.
@@ -64,7 +64,7 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
      and ```[350:0.1:351]```.
 
 ### What happens:
-For each run, Impervious uses the helper class ```impervious.HashedRun``` to
+For each run, MultiRun uses the helper class ```MultiRun.HashedRun``` to
 generate a nearly-unique alpha-numeric identifier for that particular model run.
 This is done by:
 - Generating an ```input.txt``` file from the passed parameters,
@@ -99,9 +99,9 @@ Suppose we run
 basefile = '/home/luser/work/hock_mass_balance/config/base_input.txt';
 modelpath = '/home/luser/local/bin/detim';
 
- [hashes, status, err, changes, runs] = impervious.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
+ [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
 ```
-at the Matlab repl. Impervious will take the config file
+at the Matlab repl. MultiRun will take the config file
 from ```/home/luser/work/hock_mass_balance/config/base_input.txt```
 and generate ```input.txt``` files which contain every combination of the parameters
 ```icekons``` and ```firnkons```, given the values you've assigned them
@@ -147,8 +147,8 @@ Installation
 ------------
 1. Download and compile the latest version of the 
 [Hock Melt Models](https://github.com/regine/meltmodel).
-2. Download Impervious.
-3. Make sure the folder ```+impervious``` is in your Matlab Path.
+2. Download MultiRun.
+3. Make sure the folder ```+MultiRun``` is in your Matlab Path.
 4. Done.
 
 License
