@@ -19,7 +19,7 @@ classdef LockFile < handle
       lf.STATUSCODES = statusCodes;
      
       lf.filename = filename;
-      lf.status = impervious.lib.padlock.getLockStatus(filename, lf.STATUSCODES);
+      lf.status = MultiRun.lib.padlock.getLockStatus(filename, lf.STATUSCODES);
       
     end
     

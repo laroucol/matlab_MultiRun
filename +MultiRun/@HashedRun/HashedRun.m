@@ -10,7 +10,7 @@ classdef HashedRun < handle
     hash % hash of input.txt from config
     model % fully qualified path ot model executeable
     outPath % Path where model will be outputing
-    Lock %instance of impervious.lib.padlock.LockFile
+    Lock %instance of MultiRun.lib.padlock.LockFile
     
     runStatus % has this specific configuration been run, is it running
   end
@@ -25,19 +25,19 @@ classdef HashedRun < handle
       hr.originMap = config;
       hr.model = model;
       
-      confstr = impervious.lib.glazer.mapToDegrees(config);
+      confstr = MultiRun.lib.glazer.mapToDegrees(config);
       data = unicode2native(confstr);
       hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'bin');
-      hr.hash = impervious.lib.DataHash(data, hashOpts);
+      hr.hash = MultiRun.lib.DataHash(data, hashOpts);
       
       % Use a tempfile to generate the SHA-1 hash of the config
       % text, sans hash
 %       tmpfid = fopen(tempname, 'w');
 %       if ~(tmpfid == -1)
-%         fprintf(tmpfid, impervious.lib.glazer.mapToDegrees(config));
+%         fprintf(tmpfid, MultiRun.lib.glazer.mapToDegrees(config));
 %         tmpname = fopen(tmpfid)
 %         hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'file');
-%         hr.hash = impervious.lib.DataHash(tmpname, hashOpts);
+%         hr.hash = MultiRun.lib.DataHash(tmpname, hashOpts);
 %         tmpfid = fclose(tmpname);
 %       else
 %         error('HashedRun:Issue with tempfile');
@@ -50,8 +50,8 @@ classdef HashedRun < handle
       hr.configMap('outpath') = [hr.outPath, 'outpath/'];
       
       % setup the Lock
-      stats = @(x) impervious.config.RunStatus(x);
-      hr.Lock = impervious.lib.padlock.LockFile([hr.outPath, 'runstatus.lock'], stats);
+      stats = @(x) MultiRun.config.RunStatus(x);
+      hr.Lock = MultiRun.lib.padlock.LockFile([hr.outPath, 'runstatus.lock'], stats);
       hr.runStatus = hr.Lock.status();
       
       
@@ -79,7 +79,7 @@ classdef HashedRun < handle
       success = 0;
       err = '';
       
-      if ~(self.Lock.status == impervious.config.RunStatus.DOESNOTEXIST)
+      if ~(self.Lock.status == MultiRun.config.RunStatus.DOESNOTEXIST)
         success = 2;
         err = 'HashedRun:genConfig:Lockfile Indicated config file exists.';
         return
@@ -105,14 +105,14 @@ classdef HashedRun < handle
         [fid, msg] = fopen(fileName, 'w');
         if ~(fid == -1)
           success = 1;
-          str = impervious.lib.glazer.mapToDegrees(self.configMap);
+          str = MultiRun.lib.glazer.mapToDegrees(self.configMap);
           fprintf(fid, '%s', str);
           fid = fclose(fid);
           self.setStatus('NOTRUN');
         else
           success = 0;
           self.setStatus('DOESNOTEXIST');
-          err = ('impervious.lib.glazer.HashedRun.genConfig:Error opening input.txt');
+          err = ('MultiRun.lib.glazer.HashedRun.genConfig:Error opening input.txt');
           return
         end
       end
@@ -131,22 +131,22 @@ classdef HashedRun < handle
       %
       %TODO: Add status code for a successfull completion
       switch self.runStatus
-        case impervious.config.RunStatus.INPROGRESS
+        case MultiRun.config.RunStatus.INPROGRESS
           success = 0;
-          err = 'Impervious:HashedRun:runModel: Model Run is Already in Progress';
+          err = 'MultiRun:HashedRun:runModel: Model Run is Already in Progress';
           return
-        case impervious.config.RunStatus.RUNFINISHED
+        case MultiRun.config.RunStatus.RUNFINISHED
           success = 2;
-          err = 'Impervious:HashedRun:runModel:Lockfile indicates that model has already run';
+          err = 'MultiRun:HashedRun:runModel:Lockfile indicates that model has already run';
           return
-        case impervious.config.RunStatus.EXECUTIONERROR
+        case MultiRun.config.RunStatus.EXECUTIONERROR
           success = 0;
-          err = 'Impervious:HashedRun:runModel:Lockfile indicates that the model exited early. Check input.txt.';
-        case impervious.config.RunStatus.DOESNOTEXIST
+          err = 'MultiRun:HashedRun:runModel:Lockfile indicates that the model exited early. Check input.txt.';
+        case MultiRun.config.RunStatus.DOESNOTEXIST
           [s, e] = self.genConfig();
           if ~s
             success = s;
-            err = ['impervious:HashedRun:runModel: Error :' e];
+            err = ['MultiRun:HashedRun:runModel: Error :' e];
             return
           else
             [model_stat, res] = executeModel(self);
@@ -155,11 +155,11 @@ classdef HashedRun < handle
               err = '';
             else
               success = 0;
-              err = ['impervious:HashedRun:runModel:ExecutionError: Model exited early citing:' res];
+              err = ['MultiRun:HashedRun:runModel:ExecutionError: Model exited early citing:' res];
             return
             end
           end
-        case impervious.config.RunStatus.NOTRUN
+        case MultiRun.config.RunStatus.NOTRUN
           executeModel(self);
           return
       end
@@ -184,8 +184,8 @@ classdef HashedRun < handle
     
     function setStatus(self, status)
       %Set the lockfile's status, based on the enumeration found in
-      %impervious.config.
-      self.Lock.setStatus(impervious.config.RunStatus.(status));
+      %MultiRun.config.
+      self.Lock.setStatus(MultiRun.config.RunStatus.(status));
       self.runStatus = self.Lock.status;
     end
   end

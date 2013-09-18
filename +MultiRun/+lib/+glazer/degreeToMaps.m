@@ -1,6 +1,6 @@
 function c = entryToMaps(s)
 
-  eg = impervious.lib.glazer.EntryGetter(s);
+  eg = MultiRun.lib.glazer.EntryGetter(s);
   
   c = containers.Map();
   

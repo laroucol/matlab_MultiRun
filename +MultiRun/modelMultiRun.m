@@ -17,16 +17,16 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
 
 
 s = fileread(basefile);
-c = impervious.lib.glazer.degreeToMaps(s);
+c = MultiRun.lib.glazer.degreeToMaps(s);
 
 
 if isempty(varargin)
   kw = {'none'};
   vals = {0};
 else
-   [kw , vals] = impervious.lib.wordplay.getKwargs(varargin{:});
+   [kw , vals] = MultiRun.lib.wordplay.getKwargs(varargin{:});
 end
-combs = impervious.lib.allcomb.allcomb(vals{:});
+combs = MultiRun.lib.allcomb.allcomb(vals{:});
 nCombs = size(combs);
 
 hashes = cell(nCombs(1), 1);
@@ -43,7 +43,7 @@ for combo = 1:nCombs(1)
     c(kw{keynum}) = combs(combo,keynum);
   end
   
-  HR = impervious.HashedRun(c, modelpath);
+  HR = MultiRun.HashedRun(c, modelpath);
   header = sprintf('Base config file: %s \nNew config file: %sindex.txt\n',basefile, HR.outPath);
   msg = [header sprintf('Changes made:\n') msg];
   
