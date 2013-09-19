@@ -29,20 +29,7 @@ classdef HashedRun < handle
       data = unicode2native(confstr);
       hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'bin');
       hr.hash = MultiRun.lib.DataHash(data, hashOpts);
-      
-      % Use a tempfile to generate the SHA-1 hash of the config
-      % text, sans hash
-%       tmpfid = fopen(tempname, 'w');
-%       if ~(tmpfid == -1)
-%         fprintf(tmpfid, MultiRun.lib.glazer.mapToDegrees(config));
-%         tmpname = fopen(tmpfid)
-%         hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'file');
-%         hr.hash = MultiRun.lib.DataHash(tmpname, hashOpts);
-%         tmpfid = fclose(tmpname);
-%       else
-%         error('HashedRun:Issue with tempfile');
-%       end
-      
+            
       % set up hashed paramters, this is the stuff which will get written
       % to disk, and passed to the model
       hr.outPath = [config('outpath'),  hr.hash, '/'];
@@ -75,6 +62,7 @@ classdef HashedRun < handle
       %                      - 0 something has gone wrong
       %                      - 1 config has been generated
       %                      - 2 config already existed
+      %          err: error message, if empty everything is fine
       
       success = 0;
       err = '';
@@ -129,7 +117,8 @@ classdef HashedRun < handle
       %                     already run
       %          - err: error message.
       %
-      %TODO: Add status code for a successfull completion
+      %TODO: Add status code for a successful completion
+      
       switch self.runStatus
         case MultiRun.config.RunStatus.INPROGRESS
           success = 0;

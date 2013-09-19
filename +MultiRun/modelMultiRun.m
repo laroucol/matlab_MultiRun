@@ -8,6 +8,7 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
 %       varargin - a list of key-value pairs which are modified, e.g.
 %           modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])
 %         will run the model with icekons set to each value in [5:0.1:6]
+%
 % Returns: hashes - Cell array of hashes of each run
 %          status - staus(i) = Array of return status of run with hash hashes{i}
 %          err - Error messages associated by incomplete runs
@@ -19,16 +20,20 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
 s = fileread(basefile);
 c = MultiRun.lib.glazer.degreeToMaps(s);
 
-
+%parse keyword arguments. providing a dummy if none are provided
+%this is a little kludgy and coult be improved somehow
+%by providing an alternative procedure to handle a single run.
 if isempty(varargin)
   kw = {'none'};
   vals = {0};
 else
    [kw , vals] = MultiRun.lib.wordplay.getKwargs(varargin{:});
 end
+
+%give me all permutations of parameters w/in ranges provided
+%then build appropriately sized cell arrays to store function returns in
 combs = MultiRun.lib.allcomb.allcomb(vals{:});
 nCombs = size(combs);
-
 hashes = cell(nCombs(1), 1);
 status = zeros(nCombs(1), 1);
 err = cell(nCombs(1), 1);
@@ -36,6 +41,8 @@ changes = cell(nCombs(1), 1);
 runs = cell(nCombs(1), 1);
 
 for combo = 1:nCombs(1)
+  %construct a message telling the user which configureation arguments
+  %have been set in this run
   msg = [];
   for keynum = 1:length(kw)
     msg = [msg sprintf('  %s = %g\n', kw{keynum}, combs(combo, keynum))];
@@ -43,15 +50,21 @@ for combo = 1:nCombs(1)
     c(kw{keynum}) = combs(combo,keynum);
   end
   
+  %Build the hashed run and run that sucker
   HR = MultiRun.HashedRun(c, modelpath);
+  [runsuccess, runerr] = HR.runModel();
+  
+  %this should probably contingent on the value runsuccess 
+  %print to disk messages re: changes
   header = sprintf('Base config file: %s \nNew config file: %sindex.txt\n',basefile, HR.outPath);
   msg = [header sprintf('Changes made:\n') msg];
-  
-  hashes{combo} = HR.hash;
-  [runsuccess, runerr] = HR.runModel();
   changefile = fopen([HR.outPath 'changes.txt'],'w');
   fprintf(changefile,'%s', msg);
   fclose(changefile);
+  
+  %put data about run, including the run object, into the appropirate
+  %return arrays
+  hashes{combo} = HR.hash;
   status(combo) = runsuccess;
   err{combo} = runerr;
   changes{combo} = msg;
