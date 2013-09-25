@@ -123,7 +123,9 @@ Installation
 3. Make sure the folder ```+MultiRun``` is in your Matlab Path; it's not enough
    to set navigate to the containing folder with Matlab, as the script chages
    the working directory. Alternately, you can add the folder containining ```+MultiRun```
-   to your Matlab Path
+   to your Matlab Path.  Mathworks has helpful documentation 
+   [about the Matlab Path](http://www.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html)
+   and [how to change it](http://www.mathworks.com/help/matlab/ref/pathtool.html).
 4. You're done. MultiRun is now availible ot Matlab, and you can access
     its functions and classes via ```MultiRun.<function/classname>```.
 
