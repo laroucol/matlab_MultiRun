@@ -1,42 +1,10 @@
-MultiRun
+MultiRun v 0.0.7
 ==========
 
 A Matlab tool for facilitating parameter calibration of detim/debam.
 
-
-v 0.0.7
--------
-
-Usage
-------
-MultiRun provides a method for running the models over a range of
-parameter values, as well as a helper class which manages each
-individual run of the model, and ensures that the model is not
-run more times than necessary.
-
-To run the model multiple times the function ```modelMultiRun``` is available.
-
-```matlab
-function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefile, varargin)
-
- Args: modelpath - fully qualified path to a model's executable
-       basefile - fully qualified path to a valid config file for the
-       model, this will be modified based upon the the list of key-value
-       pairs passed to varargin
-       varargin - a list of key-value pairs which are modified, e.g.
-           modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])
-         will run the model with icekons set to each value in [5:0.1:6]
- Returns: hashes - Cell array of hashes of each run
-          status - status(i) = Array of return status of run with hash hashes{i}
-          err - Error messages associated by incomplete runs
-          changes - array of changes made to input.txt
-          runs - a container.Maps indexed by hashes of HashedRun objects,
-           each corresponding to a single model run.
-```
-
 ### What you need:
-  1. Compiled versions of DEBaM or DETIM.  The full directory path to the
-     binary is passed as ```modelpath```.
+  1. Compiled versions of DEBaM or DETIM.
   2. A valid ```input.txt``` file for said model. The config
      should __not__ perform any of the optimization routines;
      at the moment, MultiRun is pretty stupid, and won't turn this off when it
@@ -101,7 +69,7 @@ modelpath = '/home/luser/local/bin/detim';
 
  [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
 ```
-at the Matlab repl. MultiRun will take the config file
+at the Matlab command line. MultiRun will take the config file
 from ```/home/luser/work/hock_mass_balance/config/base_input.txt```
 and generate ```input.txt``` files which contain every combination of the parameters
 ```icekons``` and ```firnkons```, given the values you've assigned them
@@ -126,7 +94,7 @@ mytest/
 Since the long alpha-numeric directory names can be difficult to traverse, especially
 when there are lots of them, ```multiModelRun``` also writes a file ```changes.txt```
 which lists the changes made to to the base configuration for that run, i.e.:
-```
+```bash
 $ cd mytest/output/a729f3b8529edf74e2d57cf64ba8cc91fc64907e/
 $ ls
 changes.txt     input.txt      outpath        runstatus.lock
@@ -145,11 +113,97 @@ each configuration is only run once.
 
 Installation
 ------------
-1. Download and compile the latest version of the 
-[Hock Melt Models](https://github.com/regine/meltmodel).
-2. Download MultiRun.
-3. Make sure the folder ```+MultiRun``` is in your Matlab Path.
-4. Done.
+1. If you haven't already, download and compile the latest version of the 
+  [Hock Melt Models](https://github.com/regine/meltmodel).
+  MultiRun supports version 1.x.x of the models.
+  If you already have a version downloaded and compiled,
+  there is no reason to re-download them, just use the copy you currently have.
+2. Download MultiRun, either with ```git```, or download the
+ [zipball](https://github.com/fmuzf/matlab_hk_MultiRun/archive/master.zip).
+3. Make sure the folder ```+MultiRun``` is in your Matlab Path; it's not enough
+   to set navigate to the containing folder with Matlab, as the script chages
+   the working directory. Alternately, you can add the folder containining ```+MultiRun```
+   to your Matlab Path
+4. You're done. MultiRun is now availible ot Matlab, and you can access
+    its functions and classes via ```MultiRun.<function/classname>```.
+
+
+
+API
+------
+MultiRun provides a method for running the models over a range of
+parameter values, as well as a helper class which manages each
+individual run of the model, and ensures that the model is not
+run more times than necessary.
+
+
+
+## function modelMultiRun
+
+To run the model multiple times the function ```modelMultiRun``` is available.
+
+```[hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, varargin)```
+### Args: 
+
+* ```modelpath``` - fully qualified path to a model's executable
+* ```basefile``` - fully qualified path to a valid config file for the
+* ```model```, this will be modified based upon the the list of key-value
+  pairs passed to varargin
+* ```varargin``` - a list of key-value pairs which are modified, e.g.
+ ```modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])```
+ will run the model with ```icekons``` set to each value in ```[5:0.1:6]```.
+
+### Returns:
+* ```hashes``` - Cell array of hashes of each run
+* ```status``` - status(i) = Array of return status of run with hash hashes{i}
+* ```err``` - Error messages associated by incomplete runs
+* ```changes``` - array of changes made to input.txt
+* ```runs``` - a container.Maps indexed by hashes of HashedRun objects,
+   each corresponding to a single model run.
+
+
+
+
+## class HashedRun
+
+Each run is managed by a ```HashedRun``` class, which makes the
+appropriate directories, checks to see if the run has been completed
+previously 
+
+
+### Methods: 
+  - ```hr = MultiRun.HashedRun(config, model)```
+       Object constructor function
+       __Args__: 
+      * ```config```: a valid Model configuration
+      * ```model```: the fully-qualified path for the model executable
+
+  - ```[success, err] = genConfig(self)```
+       Generate this run's input.txt, and write it to disk.
+       __Returns__: 
+       * ```success``` : success code is
+          - 0 something has gone wrong
+          - 1 config has been generated
+          - 2 config already existed
+       * ```err```: error message, if empty everything is fine
+
+  - ```[success, err] = runModel(self)```
+       Execute the model, checking to make sure that the model hasn't run
+       already.
+       __Returns__:
+       * ```success```: codes for completion are:
+          - 0 : an error has occured
+          - 1 : The model has been run successfully
+          - 2 : the lockfile indicates the model has
+          already run
+       * ```err```: error message.  
+
+### Properties: 
+  - ```configMap```: Map conainer containing info for the model run
+  - ```hash```:  SHA-1 hash of input.txt from config
+  - ```model```: Fully qualified path ot model executeable
+  - ```outPath```L Path where model will be outputing
+    
 
 License
 -------
