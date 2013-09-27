@@ -10,12 +10,9 @@ and that lengthy model runs do not need to be repeated.
 
 ### What you need:
   1. Compiled versions of DEBaM or DETIM.
-  2. A valid ```input.txt``` file for said model. This paramter file
-     should __not__ perform any of the optimization routines;
-     at the moment, MultiRun is pretty stupid, and won't turn this off when it
-     generates files for the model. It's a good idea to set as many
-     parameters as possible in this file to the ones you'd like them to be
-     in any single run of the model.
+  2. A valid ```input.txt``` file for said model. In this file, you
+     should set all of the parameters to the one's you would like the model
+     to use, with the exceptions of those MultiRun will change for each model run.
   3. Model inputs to go along with the model. See the model documentation for
      setting these up.
   4. A list of model parameters, combinations of which will be run by the model
