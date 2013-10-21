@@ -1,4 +1,4 @@
-function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefile, varargin)
+function [runs, hashes, kw, combs, status, err] = modelMultiRun(modelpath, basefile, varargin)
 % function modelMultiRun
 %
 % Args: modelpath - fully qualified path to a model's executeable
@@ -9,13 +9,16 @@ function [hashes, status, err, changes, runs] = modelMultiRun(modelpath, basefil
 %           modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])
 %         will run the model with icekons set to each value in [5:0.1:6]
 %
-% Returns: hashes - Cell array of hashes of each run
+% Returns: 
+%          runs - a container.Maps indexed by hashes of HashedRun objects,
+%           each corresponding to a single model run.
+%          hashes - Cell array of hashes of each run.
+%          kw - Cell array containing names of modified values
+%          combs - Array with values taken on by kws
 %          status - staus(i) = Array of return status of run with hash hashes{i}
 %          err - Error messages associated by incomplete runs
 %          changes - array of changes made to input.txt
-%          runs - a container.Maps indexed by hashes of HashedRun objects,
-%           each corresponding to a single model run.
-
+%          
 
 s = fileread(basefile);
 c = MultiRun.lib.glazer.degreeToMaps(s);
