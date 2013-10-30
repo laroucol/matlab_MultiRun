@@ -1,8 +1,13 @@
 function [r2, r2ln] = stakeQuality(filename)
 
+
+fid = fopen(filename);
+if fid == -1
+    error('MultiRun:quality:Quality:fileError', 'Input file could not be opened.')
+end
+
 %Easting, Northing, elevation, measured_massbal, modeled_massbal, year 1, day 1, year2, day2
 fmt = '%f %f %f %f %f %i %i %i %i';
-fid = fopen(filename);
 raw = textscan(fid, fmt, 'HeaderLines', 1);
 
 easting = raw{1};

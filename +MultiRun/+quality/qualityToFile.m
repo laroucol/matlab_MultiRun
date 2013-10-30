@@ -1,7 +1,13 @@
 function qualityToFile(runs, kw, combs, filename)
+%TODO: - choice of quality metrics
+%      - only filenames?
+
 
 fid = fopen(filename, 'w');
 % TODO: error out when file don't open
+if fid == -1
+  error('MultiRun:quality:qualityToFile:fileError', 'Outputfile could not be opened.')
+end
 
 % get perfinfo
 nCombs = size(runs);
@@ -13,8 +19,8 @@ nKeys = length(keys);
 nKw = length(kw);
 
 % format: hash [changed_values] [perfomance_metrics]
-head_fmt = ['%s ' repmat('%s ', 1, nKw + nKeys - 1) '%s\n'];
-body_fmt = ['%s ' repmat('%g ', 1, nKw + nKeys - 1) '%g\n'];
+head_fmt = ['%s\t' repmat('%s\t', 1, nKw + nKeys - 1) '%s\n'];
+body_fmt = ['%s\t' repmat('%g\t', 1, nKw + nKeys - 1) '%g\n'];
 
 fprintf(fid, head_fmt, 'Hash', kw{:}, keys{:});
 
