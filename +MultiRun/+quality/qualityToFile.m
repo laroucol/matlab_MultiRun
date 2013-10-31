@@ -22,7 +22,7 @@ nKw = length(kw);
 head_fmt = ['%s\t' repmat('%s\t', 1, nKw + nKeys - 1) '%s\n'];
 body_fmt = ['%s\t' repmat('%g\t', 1, nKw + nKeys - 1) '%g\n'];
 
-fprintf(fid, head_fmt, 'Hash', kw{:}, keys{:});
+fprintf(fid, head_fmt, 'Hash', keys{:}, kw{:});
 
 subindex = @(M,r) M{r};
 
@@ -35,7 +35,7 @@ for ii = 1:nCombs
     perf(jj) = subindex(quality(keys{jj}), ii);
   end
   
-  fprintf(fid, body_fmt, hash, changed(:), perf(:));
+  fprintf(fid, body_fmt, hash, perf(:), changed(:));
   
 end
 
