@@ -24,7 +24,7 @@ s = fileread(basefile);
 c = MultiRun.lib.glazer.degreeToMaps(s);
 
 %parse keyword arguments. providing a dummy if none are provided
-%this is a little kludgy and coult be improved somehow
+%this is a little kludgy and could be improved somehow
 %by providing an alternative procedure to handle a single run.
 if isempty(varargin)
   kw = {'none'};
@@ -34,8 +34,8 @@ else
 end
 
 %give me all permutations of parameters w/in ranges provided
-%then build appropriately sized cell arrays to store function returns in
 combs = MultiRun.lib.allcomb.allcomb(vals{:});
+%Allocate appropriately sized cell arrays to store function returns in
 nCombs = size(combs);
 hashes = cell(nCombs(1), 1);
 status = zeros(nCombs(1), 1);
@@ -53,24 +53,26 @@ for combo = 1:nCombs(1)
     c(kw{keynum}) = combs(combo,keynum);
   end
   
-  %Build the hashed run and run that sucker
+  %Build the HashedRun object, then run the model.
   HR = MultiRun.HashedRun(c, modelpath);
   [runsuccess, runerr] = HR.runModel();
   
-  %this should probably contingent on the value runsuccess 
   %print to disk messages re: changes
+  %TODO: this should probably be contingent on the value of runsuccess.
   header = sprintf('Base config file: %s \nNew config file: %sindex.txt\n',basefile, HR.outPath);
   msg = [header sprintf('Changes made:\n') msg];
   changefile = fopen([HR.outPath 'changes.txt'],'w');
   fprintf(changefile,'%s', msg);
   fclose(changefile);
   
-  %put data about run, including the run object, into the appropirate
+  %put data about run, including the run object, into the appropriate
   %return arrays
   hashes{combo} = HR.hash;
   status(combo) = runsuccess;
   err{combo} = runerr;
   changes{combo} = msg;
   runs{combo} = HR;
+  disp('.')
 end 
+disp('\n')
 end
