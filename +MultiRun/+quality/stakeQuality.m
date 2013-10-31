@@ -1,11 +1,14 @@
 function [r2, r2ln] = stakeQuality(filename)
-
+%TODO: * reformat output to be consistent w/ dischQuality
+%      * Double-check that r2 and lnr2 are calulated properly.
 
 fid = fopen(filename);
 if fid == -1
     error('MultiRun:quality:Quality:fileError', 'Input file could not be opened.')
 end
 
+%Format of Stake quality files.
+%TODO: can we extract this from the file itself?
 %Easting, Northing, elevation, measured_massbal, modeled_massbal, year 1, day 1, year2, day2
 fmt = '%f %f %f %f %f %i %i %i %i';
 raw = textscan(fid, fmt, 'HeaderLines', 1);
