@@ -1,4 +1,4 @@
-MultiRun v 0.0.7
+MultiRun v 0.0.8
 ==========
 
 A Matlab tool for facilitating parameter calibration of detim/debam.
@@ -7,6 +7,12 @@ parameters, and then execute DEBAM or DETiM for every permutation
 of these parameters. Model output is directed into folders with
 unique aphanumeric names to ensure that output data is not overwritten,
 and that lengthy model runs do not need to be repeated. 
+
+As of version 0.0.8, MultiRun is compatible with versions 2.x.x of DEBAM and DETiM,
+and incompatible with earlier versions.  Version 0.0.7, which is compatible
+with earlier versions on the models, are still availible
+[here](https://github.com/fmuzf/matlab_hk_MultiRun/releases).
+
 
 ### What you need:
   1. Compiled versions of DEBaM or DETIM.
