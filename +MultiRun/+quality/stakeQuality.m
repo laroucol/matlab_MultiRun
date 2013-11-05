@@ -1,4 +1,4 @@
-function [r2, r2ln] = stakeQuality(filename)
+function [kw, val] = stakeQuality(filename)
 %TODO: * reformat output to be consistent w/ dischQuality
 %      * Double-check that r2 and lnr2 are calulated properly.
 
@@ -9,19 +9,21 @@ end
 
 %Format of Stake quality files.
 %TODO: can we extract this from the file itself?
-%Easting, Northing, elevation, measured_massbal, modeled_massbal, year 1, day 1, year2, day2
-fmt = '%f %f %f %f %f %i %i %i %i';
-raw = textscan(fid, fmt, 'HeaderLines', 1);
+%X-coord 	 Y-coord	 Elevation(m) MeasMassbal(m)  StartYear StartDay EndYear  EndDay 	 ModeledMassbal(m)
+fmt = '%f %f %f %f %f %f %f %f %f';
+raw = textscan(fid, fmt, 'HeaderLines', 2);
 
-easting = raw{1};
-northing = raw{2};
-mBalMeas = raw{3};
-mBalModel = raw{4};
+xCord = raw{1};
+yCord = raw{2};
+elevation = raw{3};
+mBalMeas = raw{4};
 year1 = raw{5};
 day1 = raw{6};
 year2 = raw{7};
 day2 = raw{8};
+mBalModel = raw{9};
 
+%TODO: abstract this out ot its own file
 %calculate R^2
 N = length(mBalMeas) - 1;
 mbalRes= mBalMeas - mBalModel;
@@ -34,4 +36,8 @@ mbalResLn = log(mBalMeas/mBalModel);
 ssResLn = sum(mbalResLn.^2);
 ssTotalLn = N * var(log(mBalMeas));
 r2ln = 1 - ssResLn/ssTotalLn;
+
+kw = {'massbal_r2' 'massbal_lnr2'};
+val = {r2 r2ln};
+
 end
