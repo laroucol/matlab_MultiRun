@@ -21,10 +21,12 @@ nKeys = length(perfKeys);
 nKw = length(kw);
 
 %Row format: hash [perfomance_metrics] [changed_values] 
+header = 'Quality metric summary for multiple runs of meltmodel.\n';
 head_fmt = ['%s\t' repmat('%s\t', 1, nKw + nKeys - 1) '%s\n'];
 body_fmt = ['%s\t' repmat('%g\t', 1, nKw + nKeys - 1) '%g\n'];
 
 %Write column titles to file
+fprintf(fid, header);
 fprintf(fid, head_fmt, 'Hash', perfKeys{:}, kw{:});
 
 %Helper function for refrencing elements of the keys of quality, which are
