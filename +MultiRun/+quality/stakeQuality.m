@@ -1,6 +1,27 @@
 function [kw, val] = stakeQuality(filename)
-%TODO: * reformat output to be consistent w/ dischQuality
-%      * Double-check that r2 and lnr2 are calulated properly.
+% Compuet r2 and lnr2 stake mass-balance quality metrics from model files.
+% 
+% Args: filename - String, fully-qualified filename, usually
+%         <PATH_TO_FILE>/pointoutputs.txt
+%
+% Returns: * kw - Cell-array, each entry is the name of a data-field taken
+%       from <filename>.
+%          * val - Cell-array. Contains the data corresonding to the
+%          keyword of the corresponding entry.
+%
+% E.G. Suppose we call:
+%   > [kw, val] = dischQuality('/home/luser/pointoutputs.txt')
+%
+% We then get:
+%
+%    > kw{1}
+%    ans = 'massbal_r2'
+%    > val(1)
+%    ans = 0.96418
+%
+% That is, the value of 'massbal_r2' is 0.96418.
+%
+%TODO: * Double-check that r2 and lnr2 are calulated properly.
 
 fid = fopen(filename);
 if fid == -1
@@ -13,6 +34,7 @@ end
 fmt = '%f %f %f %f %f %f %f %f %f';
 raw = textscan(fid, fmt, 'HeaderLines', 2);
 
+% We don't use all of these, but we might in the future.
 xCord = raw{1};
 yCord = raw{2};
 elevation = raw{3};

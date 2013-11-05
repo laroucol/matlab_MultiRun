@@ -1,4 +1,32 @@
 function qualityToFile(runs, kw, combs, outfilename)
+% Summarize the quality metrics from the output of MultiRun.modelMultiRun,
+% and writes them to an external, tab-seperated-value file.
+%
+% Args: * runs - a cell array of MultiRun.HashedRun objects
+%       * kw - A cell array containing the model paramters which have been
+%       changed by modelMultiRun
+%       * combs - A matrix wherein combs(m,n) is the value which kw{n}
+%       takes on for runs{m}.
+%       * outfilename - String containing the filename to write the output
+%       to.
+%
+%
+% The outpus is a tab seperated file, which summarizes the performance data
+% from 'modelperformance.txt' as well as the r2 ans lnr2 of the individual
+% stake outputs.
+%
+%
+%
+% E.G. 
+% > [runs, hashes, kw, combs, status, err] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5:0.5:6.0], 'firnkons', [350:0.5:351]);
+% > MultiRun.quality.qualityToFile(runs, kw, comb, 'qualitySummary.tsv');
+%
+% This runs the models, changing the values of icekons and firnkons to the
+% values given by the function call, then takes the output of the model
+% runs, and writes a summary of the quality statistict to a file
+% 'qualitySummary.tsv'
+%
+%
 %TODO: - choice of quality metrics
 %      - only filenames?
 %     - return value?

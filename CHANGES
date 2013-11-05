@@ -1,3 +1,11 @@
+## 0.0.9 11/5/2013
+Added +quality sub-module, which adds functonalty for reading quality statistics
+from files written by the model. Relevand functions include:
+ * qualityFromRuns: Retrieves quality data from model output and returns a contianers.Map
+    object containing it.
+ * qualityToFile: Summarize the quality metrics from the output of MultiRun.modelMultiRun,
+    and writes them to an external, tab-seperated-value file.
+
 ## 0.0.8 11/3/2013
 upgrade glazer to v0.0.4
 No longer compatible with meltmodel v 0.x and 1.x

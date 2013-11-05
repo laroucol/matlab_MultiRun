@@ -1,5 +1,21 @@
 function quality = qualityFromRuns(runs)
 % Retrieve quality data from model output.
+%
+% Args: runs - Cell-Array, list of HashedRuns which have completed, usually
+%   the output of having run MultiRun.modelMultiRun.
+%
+% Returns: qualty - A contianers.Map which contains model quality
+%   statistics for every run.
+%   quality.keys consistes to the names of the quality metrics
+%   quality(<keyword>) is an cell array which contains quality information,
+%   for every run for metrtc <keyword>.
+%
+% E.G. Suppose we run:
+%
+%   > quality = MultiRun.quality.qualityFromRuns(runs);
+%
+% Then, quality('Q_r2') returns an array, where entry i is the r2 of
+% discharge for run{i}.
 
 
 % get perfinfo

@@ -1,4 +1,25 @@
 function [kw, val] = dischQuality(filename)
+% Read discharge quality metrics from model files.
+% 
+% Args: filename - String, fully-qualified filename, usually
+%         <PATH_TO_FILE>/modelperformance.txt
+%
+% Returns: * kw - Cell-array, each entry is the name of a data-field taken
+%       from <filename>.
+%          * val - Cell-array. Contains the data corresonding to the
+%          keyword of the corresponding entry.
+%
+% E.G. Suppose we call:
+%   > [kw, val] = dischQuality('/home/luser/modelperformance.txt')
+%
+% We then get:
+%
+%    > kw{1}
+%    ans = 'Q_r2'
+%    > val(1)
+%    ans = 0.96418
+%
+% That is, the value of 'Q_r2' is 0.96418.
 
 fmt = '%s\t%f';
 fid = fopen(filename);

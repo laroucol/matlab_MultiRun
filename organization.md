@@ -11,6 +11,7 @@ The directory structure of the MultiRun project look something like this:
 MultiRun
 └── +MultiRun
     ├── +config
+    ├── +quality
     ├── +lib
     │   ├── +allcomb
     │   ├── +glazer
@@ -23,6 +24,7 @@ MultiRun
 
 * ```+MultiRun```: The MultiRun package directory, everything under this folder
   is part of the MultiRun package
+* ```+quality```: Contains methods for reading mmodel-quality daty from the output of DEBaM and DETIM.
 * ```+config```: Contains implementation-specific data for MultiRun, currently an enumeration
   containing error codes used is the only member of this subpackage.
 * ```+lib```: Contains libraries/subpackages used by MultiRun. These packages
