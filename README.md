@@ -5,12 +5,12 @@ A Matlab tool for facilitating parameter calibration of detim/debam.
 Given a valid ```input.txt```, MultiRun can take ranges of model
 parameters, and then execute DEBAM or DETiM for every permutation
 of these parameters. Model output is directed into folders with
-unique aphanumeric names to ensure that output data is not overwritten,
+unique alphanumeric names to ensure that output data is not overwritten,
 and that lengthy model runs do not need to be repeated. 
 
 As of version 0.0.8, MultiRun is compatible with versions 2.x.x of DEBAM and DETiM,
 and incompatible with earlier versions.  Version 0.0.7, which is compatible
-with earlier versions on the models, are still availible
+with earlier versions on the models, are still available
 [here](https://github.com/fmuzf/matlab_hk_MultiRun/releases).
 
 
@@ -42,18 +42,18 @@ Installation
 ------------
 1. If you haven't already, download and compile the latest version of the 
   [Hock Melt Models](https://github.com/regine/meltmodel).
-  MultiRun supports version 1.x.x of the models.
+  MultiRun supports version 2.x.x of the models.
   If you already have a version downloaded and compiled,
   there is no reason to re-download them, just use the copy you currently have.
 2. Download MultiRun, either with ```git```, or download the
  [zipball](https://github.com/fmuzf/matlab_hk_MultiRun/archive/master.zip).
 3. Make sure the folder ```+MultiRun``` is in your Matlab Path; it's not enough
-   to set navigate to the containing folder with Matlab, as the script chages
-   the working directory. Alternately, you can add the folder containining ```+MultiRun```
+   to set navigate to the containing folder with Matlab, as the script changes
+   the working directory. Alternately, you can add the folder containing ```+MultiRun```
    to your Matlab Path.  Mathworks has helpful documentation 
    [about the Matlab Path](http://www.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html)
    and [how to change it](http://www.mathworks.com/help/matlab/ref/pathtool.html).
-4. You're done. MultiRun is now availible ot Matlab, and you can access
+4. You're done. MultiRun is now available to Matlab, and you can access
     its functions and classes via ```MultiRun.<function/classname>```.
 
 API (Available functions and How to Use them)
@@ -73,7 +73,7 @@ To run the model multiple times the function ```modelMultiRun``` is available.
 
 ### Arguments: 
 
-* ```modelpath``` - fully qualified path to a model's executable
+* ```modelpath``` - fully qualified path to the executable of the model you want to run (debam/detim).
 * ```basefile``` - fully qualified path to a valid parameter file for the
 * ```model```, this will be modified based upon the the list of key-value
   pairs passed to varargin
@@ -179,7 +179,7 @@ previously
 ### Methods: 
   - ```hr = MultiRun.HashedRun(config, model)```
        Object constructor function
-       __Argumentss__: 
+       __Arguments__: 
       * ```config```: The text of a valid Model 'input.txt'
       * ```model```: the fully-qualified path for the model executable
 
@@ -197,17 +197,17 @@ previously
        already.
        __Returns__:
        * ```success```: codes for completion are:
-          - 0 : an error has occured
+          - 0 : an error has occurred
           - 1 : The model has been run successfully
           - 2 : the lockfile indicates the model has
           already run
        * ```err```: error message.  
 
 ### Properties: 
-  - ```configMap```: Map conainer containing info for the model run
+  - ```configMap```: Map container containing info for the model run
   - ```hash```:  SHA-1 hash of input.txt corresponding to configMap
-  - ```model```: Fully qualified path ot model executeable
-  - ```outPath```L Path where model will be outputing
+  - ```model```: Fully qualified path to model executable
+  - ```outPath```L Path where model will be outputting
     
 
 
