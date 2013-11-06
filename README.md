@@ -40,8 +40,8 @@ with earlier versions on the models, are still available
 
 Installation
 ------------
-1. If you haven't already, download and compile the latest version of the 
-  [Hock Melt Models](https://github.com/regine/meltmodel).
+1. If you haven't already, download and compile the latest version of
+  [DEBaM and DETIM](https://github.com/regine/meltmodel).
   MultiRun supports version 2.x.x of the models.
   If you already have a version downloaded and compiled,
   there is no reason to re-download them, just use the copy you currently have.
