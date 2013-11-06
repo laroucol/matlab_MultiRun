@@ -4,7 +4,7 @@ function quality = qualityFromRuns(runs)
 % Args: runs - Cell-Array, list of HashedRuns which have completed, usually
 %   the output of having run MultiRun.modelMultiRun.
 %
-% Returns: qualty - A contianers.Map which contains model quality
+% Returns: quality - A contianers.Map which contains model quality
 %   statistics for every run.
 %   quality.keys consistes to the names of the quality metrics
 %   quality(<keyword>) is an cell array which contains quality information,
