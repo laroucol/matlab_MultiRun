@@ -74,8 +74,7 @@ To run the model multiple times the function ```modelMultiRun``` is available.
 ### Arguments: 
 
 * ```modelpath``` - fully qualified path to the executable of the model you want to run (debam/detim).
-* ```basefile``` - fully qualified path to a valid parameter file for the
-* ```model```, this will be modified based upon the the list of key-value
+* ```basefile``` - fully qualified path to a valid parameter file for the model, this will be modified based upon the the list of key-value
   pairs passed to varargin
 * ```varargin``` - a list of key-value pairs which are modified, e.g.
  ```modelMultiRun('debam', 'input.txt', 'icekons', [5:0.1:6])```
@@ -90,22 +89,27 @@ To run the model multiple times the function ```modelMultiRun``` is available.
    each corresponding to a single model run.
 
 ### E.g.
-Suppose we run 
+Suppose we have a file ```base_input.txt```, which (aside from the name)
+is a valid parameter file for DEBaM/DETIM, and a copy of ```detim``` (for example)
+located at ```/home/luser/local/bin/detim```.
+In Matlab, we run:
 ```matlab
-basefile = '/home/luser/work/hock_mass_balance/config/base_input.txt';
+basefile = '/home/luser/base_input.txt';
 modelpath = '/home/luser/local/bin/detim';
 
  [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
 ```
-at the Matlab command line. MultiRun will take the parameter file
-from ```/home/luser/work/hock_mass_balance/config/base_input.txt```
-and generate ```input.txt``` files which contain every combination of the parameters
+at the command line. MultiRun will take the parameter file
+from ```/home/luser/base_input.txt``` and generate ```input.txt```
+ files which contain every combination of the parameters
 ```icekons``` and ```firnkons```, given the values you've assigned them
-(in this case there are four combinations).  To decrease the possibility
+(in this case there are four combinations).
+ To decrease the possibility
 that one run will overwrite another, each generated file is placed in a directory
 with name determined by the SHA-1 hash of the modified parameter file,
 and the model's output is directed to that folder as well.
-This model run will result in a directory structure which looks like:
+If ```outpath``` is set to ```/home/luser/mytest``` in ```base_input.txt```,
+this model run will result in a directory structure which looks like:
 
 ```
 mytest/
@@ -119,6 +123,10 @@ mytest/
     └── fbf399de8a6ac388aad1647ad918d37f9a3d81f1
         └── outpath
 ```
+Once the parameter file is generates, Matlab then changes its
+current working directory to the folder containing the parameter
+file, and executes the command in ```modelpath``` (in our example ```detim```).
+
 Since the long alpha-numeric directory names can be difficult to traverse, especially
 when there are lots of them, ```multiModelRun``` also writes a file ```changes.txt```
 which lists the changes made to to the original parameter file for that run, i.e.:
@@ -127,8 +135,8 @@ $ cd mytest/output/a729f3b8529edf74e2d57cf64ba8cc91fc64907e/
 $ ls
 changes.txt     input.txt      outpath        runstatus.lock
 $ cat changes.txt
-Base parameter file: /home/luser/Documents/work/hock_mass_balance/mytest/input.txt
-New parameter file: /home/luser/Documents/work/hock_mass_balance/mytest/output/a729f3b8529edf74e2d57cf64ba8cc91fc64907e/index.txt
+Base parameter file: /home/luser/mytest/input.txt
+New parameter file: /home/luser/mytest/output/a729f3b8529edf74e2d57cf64ba8cc91fc64907e/index.txt
 Changes made:
   icekons = 6
   firnkons = 350
