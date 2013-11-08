@@ -29,7 +29,7 @@ with earlier versions on the models, are still available
      and ```firnkons``` takes on every value in ```[350 : 0.1 : 351]```
      we would make the call:
      ```matlab
-     runs = modelMultiRun("detim", "base_input.txt", "icekons", [5.0:0.1:6.0], "firnkons", [350:0.1:351]);
+     runs = modelMultiRun('detim', 'base_input.txt', 'icekons', [5.0:0.1:6.0], 'firnkons', [350:0.1:351]);
      ```
      This will result in one hundred model runs, wherein the configuration files passed to
      DETIM are identical to ```base_input.txt```, except that icekons and firnkons
@@ -42,13 +42,13 @@ Installation
 ------------
 1. If you haven't already, download and compile the latest version of
   [DEBaM and DETIM](https://github.com/regine/meltmodel).
-  MultiRun supports version 2.x.x of the models.
+  MultiRun supports versions 2.x.x of the models.
   If you already have a version downloaded and compiled,
   there is no reason to re-download them, just use the copy you currently have.
 2. Download MultiRun, either with ```git```, or download the
  [zipball](https://github.com/fmuzf/matlab_hk_MultiRun/archive/master.zip).
-3. Make sure the folder ```+MultiRun``` is in your Matlab Path; it's not enough
-   to set navigate to the containing folder with Matlab, as the script changes
+3. *Important*: Make sure the folder ```+MultiRun``` is in your Matlab Path; it's not enough
+   to navigate to the containing folder with Matlab, as the script changes
    the working directory. Alternately, you can add the folder containing ```+MultiRun```
    to your Matlab Path.  Mathworks has helpful documentation 
    [about the Matlab Path](http://www.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html)
@@ -56,13 +56,59 @@ Installation
 4. You're done. MultiRun is now available to Matlab, and you can access
     its functions and classes via ```MultiRun.<function/classname>```.
 
+
+Quick Start
+-----------
+1. Compile DEBaM/DETIM. Install MultiRun. *Make sure MultiRun is in your Matlab path*.
+2. Configure a ```input.txt``` parameter file for DEBaM/DETIM. Set all of the parameters
+  for the model run to the values you want them to be when the model is run, except for the
+  values you will be change using MultiRun, these can be set to anything.  This file can have any
+  name, we call it ```input.txt``` by convention, MultiRun will read it, and use it
+  to produce ```input.txt``` files for DEBaM/DETIM regardless of its name.
+3. Open Matlab.
+4. Is MultiRun in your Matlab path? Check by trying:
+```
+> MultiRun.modelMultiRun()
+``` 
+in Matlab.  Your *should get an error of the form: ```??? Input argument "config" is undefined.```.
+If you get a different error, reinstall MultiRun.
+5. For convenience, lets assign the *full path* to your ```input.txt``` file and the
+  full path to the model executable you want to run to variables. i.e.
+```matlab
+> modelName = '/home/luser/meltmodel/bin/debam';
+> configName = '/home/luser/my_glacier_folder/input.txt';
+```
+where you set ```modelName``` to the full filename of debam (detim, if you're going to run detim),
+on your machine, an ```configName```` to the full filename of your ```input.txt```.
+6. Run the ```modelMultiRun``` command from ```MultiRun```, to use matlab to run the model over
+ranges of parameter values:
+```
+> [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelName, configName, 'icekons', [5:0.1:6], 'rockkons', [0:0.1:0.5])
+```
+This will execute the model, modifying your ```input.txt``` so that
+```icekons``` and ```rockkons``` take on every combination of values
+in ```[5: 0.1 : 6]``` and ```[0 : 0.1 : 0.5]```, respectively.
+7. The output of each model run is located in a subdirectory of the ```outpath``` you specified
+in your original ```input.txt```. If ```outpath``` was set to ```/home/luser/modeloutput/```,
+you will find subdirectories of ```/home/luser/modeloutput/```, with long alpha-numeric names.
+Each directory contains:
+  * An ```input.txt``` for a single run of the model.
+  * A ```changes.txt``` file which describes the changes made to the original ```input.txt```.
+  * A directory ```outpath```, which contains the output of that single model run, corresponding that ```input.txt```.
+  * A file ```runstatus.lock```, which exists to assist ```MultiRun``` from re-running a specific parameter
+    configuration more than once. If you need to re-run a configuration for some reason, this file should be deleted
+    first.
+8. In Matlab, ```modelMultiRun``` has returned quite a bit of information to you which you can use
+to further manipulate your finished runs. These are outlined in the API below.
+9. Have Fun! 
+
+
 API (Available functions and How to Use them)
 ------
 MultiRun provides a method for running the models over a range of
 parameter values, as well as a helper class which manages each
 individual run of the model, and ensures that the model is not
 run more times than necessary.
-
 
 
 ## function modelMultiRun
