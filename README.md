@@ -61,7 +61,7 @@ Quick Start
 3. Open Matlab.
 4. Run the ```MultiRun.modelMultiRun``` command:
 
-    ```matlab
+    ```
     modelName = '/home/luser/meltmodel/bin/debam';
     configName = '/home/luser/my_glacier_folder/input.txt';
     [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelName, configName, 'icekons', [5:0.1:6], 'rockkons', [0:0.1:0.5])
