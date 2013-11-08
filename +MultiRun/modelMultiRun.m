@@ -74,4 +74,10 @@ for combo = 1:nCombs(1)
   runs{combo} = HR;
   disp('.')
 end
+
+mainOutPath = HR.originMap('outpath')
+%[mainOutPath,name,ext] = fileparts(basefile);
+performanceFileName = [mainOutPath 'multi_performance.txt'];
+MultiRun.quality.qualityToFile(runs, kw, combs, performanceFileName);
+
 end
