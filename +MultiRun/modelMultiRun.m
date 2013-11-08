@@ -73,6 +73,5 @@ for combo = 1:nCombs(1)
   changes{combo} = msg;
   runs{combo} = HR;
   disp('.')
-end 
-disp('\n')
+end
 end
