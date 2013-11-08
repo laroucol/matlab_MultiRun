@@ -129,11 +129,10 @@ To run the model multiple times the function ```modelMultiRun``` is available.
 Let ```base_input.txt```, be a valid parameter file for DEBaM/DETIM (aside from the file name),
 and a copy of ```detim``` be located at ```/home/luser/local/bin/detim```.
 In Matlab, we run:
-```matlab
+```
 basefile = '/home/luser/base_input.txt';
 modelpath = '/home/luser/local/bin/detim';
-
- [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
+[hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelpath, basefile, 'icekons', [5, 6.0], 'firnkons', [350, 351]);
 ```
 at the command line. MultiRun will take the parameter file
 from ```/home/luser/base_input.txt``` and generate ```input.txt```
