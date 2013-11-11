@@ -1,10 +1,15 @@
+## 0.0.10 11/11/2013
+* Performance statistics collected by default in modelMultiRun
+* Model output is now directed to <base_outpath>/<SHA-1 hash>/model_output.
+* modelMultiRun displays statistics after each run, and at the end of all runs.
+
 ## 0.0.9 11/5/2013
-Added +quality sub-module, which adds functonalty for reading quality statistics
-from files written by the model. Relevand functions include:
- * qualityFromRuns: Retrieves quality data from model output and returns a contianers.Map
+Added +quality sub-module, which adds functionality for reading quality statistics
+from files written by the model. Relevant functions include:
+ * qualityFromRuns: Retrieves quality data from model output and returns a containers.Map
     object containing it.
  * qualityToFile: Summarize the quality metrics from the output of MultiRun.modelMultiRun,
-    and writes them to an external, tab-seperated-value file.
+    and writes them to an external, tab-separated-value file.
 
 ## 0.0.8 11/3/2013
 upgrade glazer to v0.0.4

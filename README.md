@@ -1,4 +1,4 @@
-MultiRun v 0.0.9
+MultiRun v 0.0.10
 ==========
 
 A Matlab tool for facilitating parameter calibration of DETIM/DEBaM.
@@ -16,11 +16,11 @@ with earlier versions on the models, is still available
 
 
 ### What you need:
-  1. Compiled versions of DEBaM or DETIM.
+  1. Matlab and Compiled versions of DEBaM or DETIM.
   2. A valid ```input.txt``` file for the models. In this file, you
      should set all of the parameters you would like the model
      to use, with the exceptions of those MultiRun will change for each model run.
-  3. Model inputs to go along with the model. See the model documentation for
+  3. Input data for the models. See the model documentation for
      setting these up.
  
 
@@ -42,64 +42,80 @@ Installation
 4. Check that Matlab can find MultiRun by trying:
 
     ```matlab
-    MultiRun.modelMultiRun()
+    which MultiRun.modelMultiRun
     ```
-    in Matlab.  Your *should* get an error of the
-    form: ```??? Input argument "config" is undefined.```
-    If you get a different error, reinstall MultiRun.
+    in Matlab. This should return the filename of your installed copy of MultiRun,
+    if Matlab tells ou somotheing like "'MultiRun.modelMultiRun' not found."
+    double check that ```+MultiRun``` was placed into the Matlab path.
 5. You're done! MultiRun is now available to Matlab, and you can access
     its functions and classes via ```MultiRun.<function/classname>```.
 
 
-Quick Start
+Using MultiRun to Execute DEBaM/DETIM
 -----------
-1. Install MultiRun.
-2. Configure an ```input.txt``` parameter file for DEBaM/DETIM. Set all of the
+
+
+1. Configure an ```input.txt``` parameter file for DEBaM/DETIM. Set all of the
     parameters for the model run to the values you want them to be when the model
-    is run, except for the values you will be change using MultiRun, these can be
+    is run, except for the values you will change using MultiRun, these can be
     set to anything. 
-3. Open Matlab.
-4. Run the ```MultiRun.modelMultiRun``` command:
+2. Open Matlab.
+3. Run the ```MultiRun.modelMultiRun``` command:
 
     ```
-    modelName = '/home/luser/meltmodel/bin/debam';
-    configName = '/home/luser/my_glacier_folder/input.txt';
-    [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(modelName, configName, 'icekons', [5:0.1:6], 'rockkons', [0:0.1:0.5])
+    [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(<model filename>, <base input.txt>,  <varargin>)
     ```
-    Where you set ```modelName``` to the full file name of debam (detim, if you're
-    going to run detim), on your machine, an ```configName``` to the full file name
-    of your ```input.txt```. Also, replace ```'icekons', [5:0.1:6], 'rockkons', [0:0.1:0.5]```,
-    with the parameters you want
-    changed in your base ```input.txt```. The syntax should be familiar
-    from Matlab's ```plot``` function, moreover you may assign to arbitrary number
-    of parameters, over arbitrary ranges of values. In our example ```icekons```
-    will take on every value in ```[5:0.1:6]``` and ```rockkons``` will take on
-    every value in ```[0:0.1:0.5]```.
-5. The output of each model run is located in a subdirectory of the ```outpath```
-    specified in the base ```input.txt```. if ```outpath``` was set
-    to ```/home/luser/modeloutput/```, you will find subdirectories
-    of ```/home/luser/modeloutput/``` with long alpha-numeric names.
-    Each directory contains:
-    * The ```input.txt``` for *this* run of the model, with parameters changed from
-    the base parameter file.
-    * A ```changes.txt``` file which describes the changes made to the original ```input.txt```.
-    * A directory ```outpath```, containing the output from this run of the model.
-    This is ```outpath``` in ```input.txt``` for this model run.
-    * A file ```runstatus.lock```. This assists ```MultiRun``` to prevent re-running
-    this parameter configuration more than once. If you need to re-run this
-    configuration, delete ```runstatus.lock``` before doing so.
-8. In Matlab, ```modelMultiRun``` has returned quite a bit of information to you
-     which you can use to further manipulate your finished runs. These are outlined
-     in the API below.
-9. Have Fun! 
+    Where you set:
+    * ```<model filename>``` to the full path and file name of the executeable for debam (or detim, if you're
+    going to run detim), on your machine.
+    * ``` <base input.txt>``` to the full path and file name of the base```input.txt```.
+    * ```<varargin>``` to the parameters you want changed in your base ```input.txt```.
+    The syntax here is similar to that of  Matlab's ```plot``` function; you enter a list of
+    key-value pairs for the parameters you wish to change, i.e. if we want ```icekons```
+    to take on all of the values between 5 and 6, at intervals of 0.1, and ```rockkons```
+    to take on every value between 0 and 0.5, at intervals of 0.025, we would call
+
+    ```
+    [hashes, status, err, changes, runs] = MultiRun.modelMultiRun(<model path+filename>, <base input.txt>, 'icekons', [5:0.1:6], 'rockkons', [0:0.025:0.5])
+    ```
+
+### Output
+  Output of each model run is located in a subdirectory of the ```outpath```
+    specified in the base ```input.txt```, you will find new subdirectories
+    in ```outpath``` with long alpha-numeric names, e.g.
+
+```
+<base outpath>
+  ├── a729f3b8529edf74e2d57cf64ba8cc91fc64907e
+  │   └── model_output
+  ├── cdad489ead2ec45681e9a5ec91516623c88433ce
+  │   └── model_output
+  ├── d5c3a35650dcde462cc5eaea301cfbb62cd050d9
+  │   └── model_output
+  └── fbf399de8a6ac388aad1647ad918d37f9a3d81f1
+      └── model_output
+```
+Each directory contains:
+* The ```input.txt``` for *this* run of the model, with parameters changed from
+the base parameter file.
+* A ```changes.txt``` file which describes the changes made to the original ```input.txt```.
+* A directory ```model_output```, containing the output from this run of the model.
+This is ```outpath``` in ```input.txt``` for this model run.
+* A file ```runstatus.lock```. This assists ```MultiRun``` to prevent re-running
+this parameter configuration more than once. If you need to re-run this
+configuration, delete ```runstatus.lock``` before doing so.
+
+In Matlab, ```modelMultiRun``` has returned quite a bit of information to you
+which you can use to further manipulate your finished runs. These are outlined
+in the API below.
+
+6. Have Fun! 
 
 
-API (Available Functions/Objects and How to Use them)
+API (Available Functions/Objects and How to Use Them)
 ------
-MultiRun provides a method for running the models over a range of
-parameter values, as well as a helper class which manages each
-individual run of the model, and ensures that the model is not
-run more times than necessary.
+It is possible to use MultiRun programmatically in your Matlab scripts,
+below is the API describing 
 
 
 ## function modelMultiRun
@@ -148,18 +164,18 @@ this model run will result in a directory structure which looks like:
 mytest/
 └── output
     ├── a729f3b8529edf74e2d57cf64ba8cc91fc64907e
-    │   └── outpath
+    │   └── model_output
     ├── cdad489ead2ec45681e9a5ec91516623c88433ce
-    │   └── outpath
+    │   └── model_output
     ├── d5c3a35650dcde462cc5eaea301cfbb62cd050d9
-    │   └── outpath
+    │   └── model_output
     └── fbf399de8a6ac388aad1647ad918d37f9a3d81f1
-        └── outpath
+        └── model_output
 ```
 After generating the parameter file, Matlab changes its
 current working directory to the folder containing the parameter
 file, and executes the command in ```modelpath``` (in our example ```detim```).
-Model output is put into the folder ```<hash>/outpath```.
+Model output is put into the folder ```<hash>/model_output```.
 
 ```modelMultiRun``` also writes a file ```changes.txt```
 which lists the changes made to to the original parameter file for that run, i.e.:
@@ -250,7 +266,6 @@ previously
   - ```model```: Fully qualified path to model executable
   - ```outPath```L Path where model will be outputting
     
-
 
 License
 -------
