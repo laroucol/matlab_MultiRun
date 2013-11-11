@@ -72,12 +72,15 @@ for combo = 1:nCombs(1)
   err{combo} = runerr;
   changes{combo} = msg;
   runs{combo} = HR;
-  disp('.')
+  disp(['Run ' int2str(combo) ' of ' int2str(nCombs(1))  ' has finished.'])
 end
 
-mainOutPath = HR.originMap('outpath')
+mainOutPath = HR.originMap('outpath');
 %[mainOutPath,name,ext] = fileparts(basefile);
 performanceFileName = [mainOutPath 'multi_performance.txt'];
 MultiRun.quality.qualityToFile(runs, kw, combs, performanceFileName);
+
+disp(['Multirun has finished all runs (total of ' int2str(nCombs(1)) ' runs).']);
+disp(['Model output may be viewed in ' HR.originMap('outpath')]);
 
 end
