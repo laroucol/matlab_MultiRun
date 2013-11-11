@@ -34,7 +34,7 @@ classdef HashedRun < handle
       % to disk, and passed to the model
       hr.outPath = [config('outpath'),  hr.hash, '/'];
       hr.configMap = copy_map(config);
-      hr.configMap('outpath') = [hr.outPath, 'outpath/'];
+      hr.configMap('outpath') = [hr.outPath, 'model_output/'];
       
       % setup the Lock
       stats = @(x) MultiRun.config.RunStatus(x);
@@ -145,11 +145,18 @@ classdef HashedRun < handle
             else
               success = 0;
               err = ['MultiRun:HashedRun:runModel:ExecutionError: Model exited early citing:' res];
-            return
             end
+            return
           end
         case MultiRun.config.RunStatus.NOTRUN
-          executeModel(self);
+          [model_stat, res] = executeModel(self);
+          if ~model_stat
+            success = 1;
+            err = '';
+          else
+            success = 0;
+            err = ['MultiRun:HashedRun:runModel:ExecutionError: Model exited early citing:' res];
+          end
           return
       end
       
