@@ -105,11 +105,20 @@ This is ```outpath``` in ```input.txt``` for this model run.
 this parameter configuration more than once. If you need to re-run this
 configuration, delete ```runstatus.lock``` before doing so.
 
+#### Model Performance
+In addition, the ```outpath``` folder specified in your base ```input.txt```
+will contain a  tab-seperated file ```multi_performance.txt```.
+This folder contains a summary of model performance statistics, changes made
+to the base ```input.txt```.  Additionally, the SHA-1 hash, which determines the
+output folder for that specific run, is listes so that the outout of any particular
+model run can be easily found.
+
+
 In Matlab, ```modelMultiRun``` has returned quite a bit of information to you
 which you can use to further manipulate your finished runs. These are outlined
 in the API below.
 
-6. Have Fun! 
+### Have Fun! 
 
 
 API (Available Functions/Objects and How to Use Them)
