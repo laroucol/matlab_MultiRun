@@ -1,5 +1,5 @@
 function [kw, val] = stakeQuality(filename)
-% Compuet r2 and lnr2 stake mass-balance quality metrics from model files.
+% Compuet r2 and rmse stake mass-balance quality metrics from model files.
 % 
 % Args: filename - String, fully-qualified filename, usually
 %         <PATH_TO_FILE>/pointoutputs.txt
@@ -21,7 +21,7 @@ function [kw, val] = stakeQuality(filename)
 %
 % That is, the value of 'massbal_r2' is 0.96418.
 %
-%TODO: * Double-check that r2 and lnr2 are calulated properly.
+%TODO: * Double-check that r2 and rmse are calulated properly.
 
 fid = fopen(filename);
 if fid == -1
@@ -53,13 +53,10 @@ ssRes = sum(mbalRes.^2);
 ssTotal = N * var(mBalMeas);
 r2 = 1 - ssRes/ssTotal;
 
-%calculate r^2 of ln
-mbalResLn = log(mBalMeas/mBalModel);
-ssResLn = sum(mbalResLn.^2);
-ssTotalLn = N * var(log(mBalMeas));
-r2ln = 1 - ssResLn/ssTotalLn;
+%calulate rmse
+rmse = sqrt(mean((mBalModel - mBalMeas).^2));
 
-kw = {'massbal_r2' 'massbal_lnr2'};
-val = {r2 r2ln};
+kw = {'massbal_r2'; 'massbal_rmse'};
+val = [r2; rmse];
 
 end
