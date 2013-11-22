@@ -43,8 +43,8 @@ nCombs = nCombs(1);
 
 %Extract model quality info, and figure out how many columns our file will
 %need.
-quality = MultiRun.quality.qualityFromRuns(runs);
-perfKeys = quality.keys;
+%quality = MultiRun.quality.qualityFromRuns(runs);
+[perfKeys, perfVals] = qualVals(runs);
 nKeys = length(perfKeys);
 nKw = length(kw);
 
@@ -55,7 +55,7 @@ body_fmt = ['%s\t' repmat('%g\t', 1, nKw + nKeys - 1) '%g\n'];
 
 %Write column titles to file
 fprintf(fid, header);
-fprintf(fid, head_fmt, 'Hash', perfKeys{:}, kw{:});
+fprintf(fid, head_fmt, 'Folder', perfKeys{:}, kw{:});
 
 %Helper function for refrencing elements of the keys of quality, which are
 %arrays
@@ -66,12 +66,7 @@ for ii = 1:nCombs
   %get the run's hash, and parameter constellation
   hash = runs{ii}.hash;
   changed = combs(ii,:);
-  
-  %allocate performance array, then populate it with values from quality.
-  perf = zeros(1, nKeys);
-  for jj = 1:nKeys
-    perf(jj) = subindex(quality(perfKeys{jj}), ii);
-  end
+  perf = perfVals(ii, :);
   
   fprintf(fid, body_fmt, hash, perf(:), changed(:));
   
@@ -79,4 +74,36 @@ end
 
 fclose(fid);
 
+end
+
+function [kw, val] = qualVals(runs)
+% Retrieve quality data from model output.
+%
+% Args: runs - Cell-Array, list of HashedRuns which have completed, usually
+%   the output of having run MultiRun.modelMultiRun.
+%
+% Returns: kw - List of the names of the performance
+%
+% TODO: better handle missing keys
+
+
+% get perfinfo
+nCombs = size(runs);
+nCombs = nCombs(1);
+val = [];
+
+for nn = 1:nCombs 
+  %Read discharge quality from 'modelperformance.txt'
+  disPerfFilename = [runs{nn}.configMap('outpath') 'modelperformance.txt'];
+  [qkw, qval] = MultiRun.quality.dischQuality(disPerfFilename);
+ 
+  %Read Mass-Balance r2 andr2ln at sampled stakes
+  massBalPerfFilename = [runs{nn}.configMap('outpath') 'pointbalances.txt'];
+  [mbkw, mbval] = MultiRun.quality.stakeQuality(massBalPerfFilename);
+  
+  thisVal = [mbval' qval'];
+  val = [val; thisVal];
+end %loop over runs
+
+kw = [mbkw; qkw]';
 end
