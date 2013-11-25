@@ -142,18 +142,20 @@ model run can be easily found.
  in case of ambiguous model performance for different criteria.
  
  The performance variables are (order of columns in file):
-  ```massbal_r2```: coefficient of determination between measured and modeled point mass balances
-  ```massbal_rmse```: root mean square error between measured and modeled point mass balances
-  ```Q_R2```: Nash-Sutcliffe coefficient indicating agreement between measured and modeled discharge (-infinity to 1)
-  ```Q_lnR2```: same but using logarithmic discharge (to evaluate agreement during low-flow conditions
-  ```Qvolumesim```: Total simulated discharge volume in 100,000 m3 over simulation period
-  ```Qvolumemeas```: Total measured discharge volume in 100,000 m3 over simulation period (only time steps with valid data)
-  ```nsteps```: number of time steps simulated
-  ```nstepsdis```: number of time steps of nsteps that contain valid discharge data.
-  Note if any of the variables are not available (for example, if you don't have discharge data, MultiRun will fill those columns with -9999, i.e. the
-  order of variables in the output file remains constant no matter available observations.
-  ```totalglacierwidemassbalance(m)```: total mass balance over the entire glacier over the entire simulation period.
-  The following columns give the values of the parameters chosen to vary with MultiRun.
+  - ```massbal_r2```: coefficient of determination between measured and modeled point mass balances
+  - ```massbal_rmse```: root mean square error between measured and modeled point mass balances
+  - ```Q_R2```: Nash-Sutcliffe coefficient indicating agreement between measured and modeled discharge (-infinity to 1)
+  - ```Q_lnR2```: same but using logarithmic discharge (to evaluate agreement during low-flow conditions
+  - ```Qvolumesim```: Total simulated discharge volume in 100,000 m3 over simulation period
+  - ```Qvolumemeas```: Total measured discharge volume in 100,000 m3 over simulation period (only time steps with valid data)
+  - ```nsteps```: number of time steps simulated
+  - ```nstepsdis```: number of time steps of nsteps that contain valid discharge data.
+  - ```totalglacierwidemassbalance(m)```: total mass balance over the entire glacier over the entire simulation period.
+
+ Note if any of the variables are not available (for example, if you don't have discharge data), MultiRun will fill those
+  columns with -9999, i.e. the order of variables in the output file remains constant no matter available observations.
+
+  The columns which follow give the values of the parameters changed by MultiRun.
 
 
 In Matlab, ```modelMultiRun``` has returned quite a bit of additional information to you
