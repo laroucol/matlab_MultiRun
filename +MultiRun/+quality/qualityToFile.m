@@ -1,4 +1,6 @@
 function qualityToFile(runs, kw, combs, outfilename)
+%  called from modelMultiRun, writes output file 'multiperformance.txt'
+
 % Summarize the quality metrics from the output of MultiRun.modelMultiRun,
 % and writes them to an external, tab-seperated-value file.
 %
@@ -43,7 +45,6 @@ nCombs = nCombs(1);
 
 %Extract model quality info, and figure out how many columns our file will
 %need.
-%quality = MultiRun.quality.qualityFromRuns(runs);
 [perfKeys, perfVals] = qualVals(runs);
 nKeys = length(perfKeys);
 nKw = length(kw);
@@ -76,6 +77,7 @@ fclose(fid);
 
 end
 
+
 function [kw, val] = qualVals(runs)
 % Retrieve quality data from model output.
 %
@@ -96,11 +98,14 @@ for nn = 1:nCombs
   %Read discharge quality from 'modelperformance.txt'
   disPerfFilename = [runs{nn}.configMap('outpath') 'modelperformance.txt'];
   [qkw, qval] = MultiRun.quality.dischQuality(disPerfFilename);
+       %qkw contains all variable names for the discharge variables
+       %(Qr2 .... nstepsdis)
+       %qval=values for qkw for one run
  
-  %Read Mass-Balance r2 andr2ln at sampled stakes
+  %Calculate Mass-Balance r2 and RMSE at sampled stakes
   massBalPerfFilename = [runs{nn}.configMap('outpath') 'pointbalances.txt'];
   [mbkw, mbval] = MultiRun.quality.stakeQuality(massBalPerfFilename);
-  
+      % function stakeQuality is in /MultiRun/quality/
   thisVal = [mbval' qval'];
   val = [val; thisVal];
 end %loop over runs

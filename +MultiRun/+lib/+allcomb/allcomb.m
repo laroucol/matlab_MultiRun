@@ -1,4 +1,6 @@
 function A = allcomb(varargin)
+  % called by modelMultiRun
+
 % ALLCOMB - All combinations
 %    B = ALLCOMB(A1,A2,A3,...,AN) returns all combinations of the elements
 %    in A1, A2, ..., and AN. B is P-by-N matrix is which P is the product

@@ -1,4 +1,7 @@
 function [kw, val] = dischQuality(filename)
+
+% read from function qualVals in qualityToFile.m (under /MultiRun/quality/
+
 % Read discharge quality metrics from model files.
 % 
 % Args: filename - String, fully-qualified filename, usually
@@ -29,7 +32,7 @@ if fid == -1
 end
 
 raw = textscan(fid, fmt, 'HeaderLines', 2);
-kw = raw{1};
-val = raw{2};
+kw = raw{1};   %includes text (variable names) of first column of 'modelperformance.txt'
+val = raw{2};  %includes values of each output variable (colum 2)
 
 end

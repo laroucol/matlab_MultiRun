@@ -2,38 +2,42 @@ classdef HashedRun < handle
   %HashedRun: Manages a single run of Debam/Detim, whose output is sorted
   %into folders deterministically via SHA-1.
 
-  
-  properties
-    originMap %Map which is hashed
-    configMap %Map conainer containing info for the model run
-    %configText % Text which will be written 
-    hash % hash of input.txt from config
-    model % fully qualified path ot model executeable
-    outPath % Path where model will be outputing
-    Lock %instance of MultiRun.lib.padlock.LockFile
+  % Define variables ----
+  properties   %defines variables without assigning any values to them
+    originMap %=containers.Map (built-in Matlab variable type); Map which is hashed; contains input.txt similar to struct
+    configMap %=containers.Map (built-in Matlab variable type); Map conainer containing info for the model run
+        %both Maps are output of glazer.degreeToMap
+    hash % hash (number included in output path of results) of input.txt from config (string)
+    model % fully qualified path to model executeable  (string)
+    outPath % Path where model will be outputing  (string)
+    Lock %instance of object: MultiRun.lib.padlock.LockFile; flag avoiding making runs that already exist
     
     runStatus % has this specific configuration been run, is it running
   end
   
+  % --- Define all functions available
+  
   methods
-    
-    function hr = HashedRun(config, model)
+
+    function hr = HashedRun(config, model)  %function puts values into properties variables above
       % Object constructor function
-      % Args: config: a valid Model configuration
-      %      model: the fully-qualified path for the model executable
+      % Args: config: a valid Model configuration (containers.Map)
+      %      model: the fully-qualified path for the model executable (string)
       
-      hr.originMap = config;
-      hr.model = model;
+      hr.originMap = config;  %includes all data of input.txt as containers.Map type
+      hr.model = model;   %path and model name (string)
       
-      confstr = MultiRun.lib.glazer.mapToDegrees(config);
-      data = unicode2native(confstr);
+         % converts config to a string
+      confstr = MultiRun.lib.glazer.mapToDegrees(config);  %input.txt
+      data = unicode2native(confstr);  %converts string to bytes (binary)
+         % creating the number of output path
       hashOpts = struct('Method', 'SHA-1', 'Format', 'hex', 'Input', 'bin');
-      hr.hash = MultiRun.lib.DataHash(data, hashOpts);
+      hr.hash = MultiRun.lib.DataHash(data, hashOpts);   %includes the final number
             
-      % set up hashed paramters, this is the stuff which will get written
+      % set up hashed parameters, this is the stuff which will get written
       % to disk, and passed to the model
-      hr.outPath = [config('outpath'),  hr.hash, '/'];
-      hr.configMap = copy_map(config);
+      hr.outPath = [config('outpath'),  hr.hash, '/'];   %create complete output path including hash number
+      hr.configMap = copy_map(config);      %defined in function below
       hr.configMap('outpath') = [hr.outPath, 'model_output/'];
       
       % setup the Lock
@@ -45,7 +49,7 @@ classdef HashedRun < handle
       % Make a copy of a handle object.
       function new = copy_map(this)
       % Instantiate new object of the same class.
-        new = feval(class(this));
+        new = feval(class(this));   %feval=function eval
  
         % Copy all non-hidden properties.
         p = keys(this);

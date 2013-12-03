@@ -8,7 +8,7 @@ function ostr = mapToDegrees(CC)
 % The Map object must have a key for every parameter specified in
 % "input.txt".
 %
-%Args: CC - a dictionary containing all of the appropriate elements
+%Args: CC - a containers.Map containing all of the appropriate elements
 %Returns: ostr - string contianing  a valid input.txt for the Hock melt model
 
     ostr = [];
@@ -266,8 +266,9 @@ function ostr = mapToDegrees(CC)
 end
   
 
+% --- called above frequently to format numbers
 function s = dropZeros(f)
-% Helper function to drop trailing zeros from decimal representations.
+% Helper function to drop trailing zeros from decimal representations (e.g. turns 1.200000000000000 into 1.2).
 % This is a little slow.
 str = sprintf('%0.15f', f);
 re =regexp(str, '^0+(?!\.)|(?<!\.)0+$', 'split');
@@ -275,6 +276,7 @@ s = char(re(1));
 end
 
 
+% --- called above only for stake coordinates
 function s = fmtStakes(fmt, num)
 % Format Output-Stake locations to match
 % correct format given by 'coordinatesyes'

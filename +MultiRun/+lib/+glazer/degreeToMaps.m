@@ -4,10 +4,13 @@
 
 function c = degreeToMaps(s)
 % degreeToMaps
+%  PURPOSE: READS INPUT.TXT INTO BETTER MATLAB DATA TYPE
+%     called from ModelMultiRun
+
 % Load strings containing valid DEBaM/DETIM v1.x.x input.txt files
 % into MATLAB containers.Map dictionaries, which may be manipulated.
 %
-% Args: s - String contining a full "input.txt" config file
+% Args: s - String containing a full "input.txt" config file
 % Returns: c - MATLAB containers.Map object, whose keys are the
 % names of parameters set in "input.txt" and whose values are the values
 % from said config file.
@@ -21,11 +24,13 @@ function c = degreeToMaps(s)
 %
 
 
-  eg = MultiRun.lib.glazer.EntryGetter(s);
+  eg = MultiRun.lib.glazer.EntryGetter(s);   %s=input.txt
+     %EntryGetter is object created in EntryGetter.m (in
+     %/lib/+glazer/@EntryGetter
   
   c = containers.Map();
   
-  c('daysscreenoutput') = toInt(eg.linePos(3, 1));
+  c('daysscreenoutput') = toInt(eg.linePos(3, 1));   %3. line, 1. word convert to integer
   c('inpath') = (eg.linePos(4, 1));
   c('outpath') = (eg.linePos(5, 1));
   c('jdbeg') = toInt(eg.linePos(6, 1));
@@ -179,6 +184,9 @@ function c = degreeToMaps(s)
 
 
   c('n_albfiles') = toInt(lineposOffset(64, 1));
+  
+  
+  
   c('albsnow') = str2double(lineposOffset(65, 1));
   c('albslush') = str2double(lineposOffset(66, 1));
   c('albice') = str2double(lineposOffset(67, 1));
@@ -286,13 +294,15 @@ function c = degreeToMaps(s)
 end
 
 
+% called several times above (nowhere else)
 function i = toInt(s)
 % Convert strings to Integers not floats
-  ss = str2num(s);
-  i = int32(ss);
+  ss = str2num(s);  %converts string to float
+  i = int32(ss);    %convert float to integer
 end
 
 
+% called above only once for stake coordinates
 function e = coordFmt(fmt, str)
 % convert output-stake coordinates 
 % to corect type given 'coordinateyes'

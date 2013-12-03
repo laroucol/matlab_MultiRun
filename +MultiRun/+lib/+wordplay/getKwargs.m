@@ -1,5 +1,7 @@
 function [keys, vals] = getKwargs(varargin)
 
+% called from modelMultiRun
+% checking if arguments given by user for paramters to be calibrated in call of multiRun makes sense
 
 nVargs = length(varargin);
 if (mod(nVargs, 2) ~= 0)

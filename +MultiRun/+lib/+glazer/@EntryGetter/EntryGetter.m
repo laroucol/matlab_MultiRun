@@ -1,6 +1,9 @@
 classdef EntryGetter
 %  EntryGetter
 %
+% PURPOSE: read input.txt and pull out variables to be changed
+%          called from degreeToMaps.m
+
 %  Object to take in a string, delimited by newlines, and allow
 %  one to look up words in the string based upon line number
 %  and position in the line.
