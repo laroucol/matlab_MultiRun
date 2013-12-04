@@ -1,8 +1,8 @@
 function [kw, val] = dischQuality(filename)
 
-% read from function qualVals in qualityToFile.m (under /MultiRun/quality/
+% called from function qualVals in qualityToFile.m (under /MultiRun/quality/
 
-% Read discharge quality metrics from model files.
+% Read quality metrics from modelperformance.txt (created by detim/debam).
 % 
 % Args: filename - String, fully-qualified filename, usually
 %         <PATH_TO_FILE>/modelperformance.txt

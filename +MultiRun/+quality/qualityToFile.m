@@ -1,5 +1,8 @@
 function qualityToFile(runs, kw, combs, outfilename)
 %  called from modelMultiRun, writes output file 'multiperformance.txt'
+%  takes all info from modelperformance.txt and calls function to calculate
+%  performance of point balance (stake) simulations, and puts all data in
+%  right format for output
 
 % Summarize the quality metrics from the output of MultiRun.modelMultiRun,
 % and writes them to an external, tab-seperated-value file.
@@ -94,8 +97,8 @@ nCombs = size(runs);
 nCombs = nCombs(1);
 val = [];
 
-for nn = 1:nCombs 
-  %Read discharge quality from 'modelperformance.txt'
+for nn = 1:nCombs   %for all parameter combinations
+  %Read quality values from 'modelperformance.txt' (created by detim/debam)
   disPerfFilename = [runs{nn}.configMap('outpath') 'modelperformance.txt'];
   [qkw, qval] = MultiRun.quality.dischQuality(disPerfFilename);
        %qkw contains all variable names for the discharge variables

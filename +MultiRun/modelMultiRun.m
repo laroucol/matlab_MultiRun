@@ -84,7 +84,8 @@ for combo = 1:nCombs(1)
   disp(['Run ' int2str(combo) ' of ' int2str(nCombs(1))  ' has finished.'])
 end
 
-% --- writing multiperformance.txt
+
+% --- writing multiperformance.txt ---------------------
 mainOutPath = HR.originMap('outpath');
 %[mainOutPath,name,ext] = fileparts(basefile);
 performanceFileName = [mainOutPath 'multi_performance.txt'];
