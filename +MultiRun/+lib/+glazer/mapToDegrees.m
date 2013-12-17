@@ -34,9 +34,11 @@ function ostr = mapToDegrees(CC)
     ostr = [ostr sprintf('%i    %%snow cover to grid file at midnight.  snowyes\n', CC('snowyes'))];
     ostr = [ostr sprintf('%i    %%snow or surface written to file if jd dividable by this value.  daysnow\n', CC('daysnow'))];
     ostr = [ostr sprintf('%i    %%number of jd for output of surface type/snow cover.  numbersnowdaysout\n', CC('numbersnowdaysout'))];
-    jdsurfaceLoc = cell2mat(arrayfun(@(x) sprintf('%i ', x), CC('jdsurface'), 'uniformoutput', false));
+    if CC('numbersnowdaysout') ~=0
+      jdsurfaceLoc = cell2mat(arrayfun(@(x) sprintf('%i ', x), CC('jdsurface'), 'uniformoutput', false));
 
-    ostr = [ostr jdsurfaceLoc(1:end-1) char(10)];
+      ostr = [ostr jdsurfaceLoc(1:end-1) char(10)];
+    end
 
     ostr = [ostr '%----------- 2.) MASS BALANCE -------------------' char(10)];
     ostr = [ostr sprintf('%i    %%gridout winter mass balance yes=1, no=0.  winterbalyes\n', CC('winterbalyes'))];
@@ -156,6 +158,15 @@ function ostr = mapToDegrees(CC)
 
     ostr = [ostr '%******** 8.) SURFACE TYPE / ALBEDO ***********************************' char(10)];
     ostr = [ostr sprintf('%i    %%number of transient surface type files\n', CC('n_albfiles'))];
+    
+    if CC('n_albfiles')
+      jdstartalb = CC('jdstartalb');
+      namealb = CC('namealb');
+      for albfile = 1:CC('n_albfiles')
+        ostr = [ostr sprintf('%s %s\n',dropZeros(jdstartalb{albfile}), namealb{albfile})];
+      end
+    end
+    
     ostr = [ostr sprintf('%s    %%albedo for snow and firn (fixed value).  albsnow\n', dropZeros(CC('albsnow')))];
     ostr = [ostr sprintf('%s    %%albedo for slush.  albslush\n', dropZeros(CC('albslush')))];
     ostr = [ostr sprintf('%s    %%albedo for ice.  albice\n', dropZeros(CC('albice')))];
@@ -264,7 +275,7 @@ function ostr = mapToDegrees(CC)
     ostr = [ostr stake_coordsLoc];
 
 end
-  
+
 
 % --- called above frequently to format numbers
 function s = dropZeros(f)
