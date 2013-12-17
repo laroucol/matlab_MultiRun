@@ -1,4 +1,4 @@
-MultiRun v 0.0.11
+MultiRun v 0.0.12
 ==========
 
 A Matlab tool for facilitating parameter calibration of DETIM/DEBaM.

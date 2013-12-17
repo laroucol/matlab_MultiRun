@@ -1,3 +1,6 @@
+## 0.0.12 12/17/2013
+* Upgrade glazer to v0.0.5, fixed issue #6.
+
 ## 0.0.10 11/11/2013
 * Performance statistics collected by default in modelMultiRun
 * Model output is now directed to <base_outpath>/<SHA-1 hash>/model_output.
