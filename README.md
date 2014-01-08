@@ -24,6 +24,7 @@ The tool was first released in fall 2013.
 
 ### What you need:
   1. Matlab and Compiled versions of DEBaM or DETIM.
+    If you are on Windows, and are using Cygwin to compile and run the models
   2. A valid ```input.txt``` file for the models. In this file, you
      should set all of the parameters you would like the model
      to use, with the exceptions of those MultiRun will change for each model run.
@@ -57,6 +58,15 @@ Installation
 5. You're done! MultiRun is now available to Matlab, and you can access
     its functions and classes via ```MultiRun.<function/classname>```.
 
+### A Caveat for Windows Users
+Windows users who have compiled the model with Cygwin will need
+to copy the file ```cygwin1.dll``` into the same directory as the
+model executeables (usually ```meltmodel\bin```, but whereever you
+have placed ```detim.exe``` and ```debam.exe```).  Typically, Cygwin
+installs ```cygwin1.dll``` to ```C:\\Cygwin\bin\cygwin1.dll```, but depending
+on your Cygwin installation, it may be located elsewhere (```c:\\Program Files\Cygwin\bin```,
+for instance). Copying this file to the same folder as ```debam/detim``` is sufficient
+for most applications.
 
 Using MultiRun to Execute DEBaM/DETIM
 -----------
