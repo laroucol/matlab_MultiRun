@@ -28,7 +28,7 @@ fmt = '%s\t%f';
 fid = fopen(filename);
 
 if fid == -1
-    error('MultiRun:quality:dischQuality:fileError', 'Input file could not be opened.')
+    error('MultiRun:quality:dischQuality:fileError', ['Input file could not be opened: ', filename])
 end
 
 raw = textscan(fid, fmt, 'HeaderLines', 2);
