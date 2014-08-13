@@ -96,20 +96,30 @@ function [kw, val] = qualVals(runs)
 nCombs = size(runs);
 nCombs = nCombs(1);
 val = [];
+mbkw = {'null'};
+qkw = {'null'};
 
 for nn = 1:nCombs   %for all parameter combinations
   %Read quality values from 'modelperformance.txt' (created by detim/debam)
   disPerfFilename = [runs{nn}.configMap('outpath') 'modelperformance.txt'];
+  try
   [qkw, qval] = MultiRun.quality.dischQuality(disPerfFilename);
        %qkw contains all variable names for the discharge variables
        %(Qr2 .... nstepsdis)
        %qval=values for qkw for one run
+  catch exception
+      qval = strcat(exception.identifier, ' : ', exception.message)';
+  end
  
   %Calculate Mass-Balance r2 and RMSE at sampled stakes
   massBalPerfFilename = [runs{nn}.configMap('outpath') 'pointbalances.txt'];
+  try
   [mbkw, mbval] = MultiRun.quality.stakeQuality(massBalPerfFilename);
+  catch exception
+      mbval = strcat(exception.identifier, ' : ', exception.message)';
+  end
       % function stakeQuality is in /MultiRun/quality/
-  thisVal = [mbval' qval'];
+  thisVal = [mbval', qval'];
   val = [val; thisVal];
 end %loop over runs
 

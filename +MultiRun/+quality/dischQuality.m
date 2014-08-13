@@ -32,6 +32,7 @@ if fid == -1
 end
 
 raw = textscan(fid, fmt, 'HeaderLines', 2);
+fclose(fid);
 kw = raw{1};   %includes text (variable names) of first column of 'modelperformance.txt'
 val = raw{2};  %includes values of each output variable (colum 2)
 

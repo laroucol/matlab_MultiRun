@@ -33,6 +33,7 @@ end
 %X-coord 	 Y-coord	 Elevation(m) MeasMassbal(m)  StartYear StartDay EndYear  EndDay 	 ModeledMassbal(m)
 fmt = '%f %f %f %f %f %f %f %f %f';
 raw = textscan(fid, fmt, 'HeaderLines', 2);
+fclose(fid);
 
 % We don't use all of these, but we might in the future.
 xCord = raw{1};
