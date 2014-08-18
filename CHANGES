@@ -1,3 +1,7 @@
+## 0.0.13 08/18/2014
+* Fixes bug wherein large runs would not collate perfornace statistics because
+the maximum number of open files would be reached.
+
 ## 0.0.12 12/17/2013
 * Upgrade glazer to v0.0.5, fixed issue #6.
 
