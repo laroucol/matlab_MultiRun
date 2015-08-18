@@ -9,7 +9,7 @@ function ostr = mapToDegrees(CC)
 % "input.txt".
 %
 %Args: CC - a containers.Map containing all of the appropriate elements
-%Returns: ostr - string contianing  a valid input.txt for the Hock melt model
+%Returns: ostr - string containing  a valid input.txt for the Hock melt model
 
     ostr = [];
 

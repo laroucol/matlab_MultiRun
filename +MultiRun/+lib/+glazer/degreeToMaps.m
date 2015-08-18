@@ -192,14 +192,11 @@ function c = degreeToMaps(s)
   c('monthtempgradyes') = toInt(lineposOffset(98, 1));
   
   c('monthtempgrad') = arrayfun(@(y)str2double(lineposOffset(98, y)), 2:13);
-  %float(lineposOffset(59,x)) for x in range(1,13));
     
   c('monthtempscenyes') = toInt(lineposOffset(99, 1));
   c('monthtempscen') = arrayfun(@(y)str2double(lineposOffset(99, y)), 2:13);
-  %(float(lineposOffset(60,x)) for x in range(1,13));
   c('monthprecipscenyes') = toInt(lineposOffset(100, 1));
   c('monthprecipscen') = arrayfun(@(y)str2double(lineposOffset(100, y)), 2:13);
-  %(float(lineposOffset(61,x)) for x in range(1,13));
 
 
   c('n_albfiles') = toInt(lineposOffset(102, 1));
@@ -319,10 +316,8 @@ function c = degreeToMaps(s)
     stake_coords = [];
     for ii = 187:(187 + c('maxmeltstakes') - 1)
       thisStake = [coordFmt(fmt, lineposOffset(ii, 1)), coordFmt(fmt,lineposOffset(ii, 2))];
-      %thisStake = arrayfun(@(y)coordFmt(fmt,y), thisStake);%, 'UniformOutput', false);
       stake_coords = [stake_coords; thisStake ];
     end
-    %stake_coords = (map(fmt, [lineposOffset(ii,0), lineposOffset(ii,1)] for ii = range(159, 159 + c('maxmeltstakes'))));
     c('stake_coords') = stake_coords;
   else
     c('stake_coords') = [];
