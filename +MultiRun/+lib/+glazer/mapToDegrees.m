@@ -41,10 +41,10 @@ function ostr = mapToDegrees(CC)
     end
 
     ostr = [ostr '%----------- 2.) MASS BALANCE -------------------' char(10)];
-    ostr = [ostr sprintf('%i    %%gridout winter mass balance yes=1, no=0.  winterbalyes\n', CC('winterbalyes'))];
-    ostr = [ostr sprintf('%i  %i    %%julian day winter starts and ends.  winterjdbeg  winterjdend\n', CC('winterjdbeg'), CC('winterjdend'))];
-    ostr = [ostr sprintf('%i    %%gridout summer mass balance yes=1, no=0.  summerbalyes\n', CC('summerbalyes'))];
-    ostr = [ostr sprintf('%i  %i    %%julian day summer starts and ends.  summerjdbeg  summerjdend\n', CC('summerjdbeg'), CC('summerjdend'))];
+    ostr = [ostr sprintf('%i    %%output grid of winter mass balance yes=1, no=0.  winterbalyes\n', CC('winterbalyes'))];
+    ostr = [ostr sprintf('%i    %%output grid of summer mass balance, yes=1, no=0.  summerbalyes\n', CC('summerbalyes'))];
+    ostr = [ostr sprintf('%i    %%day of year when winter starts. Summer ends day before. winterjdbeg\n', CC('winterjdbeg'))];
+    ostr = [ostr sprintf('%i    %%day of year when winter ends. Summer starts next day. winterjdend\n', CC('winterjdbend'))];
     ostr = [ostr sprintf('%i    %%1=dates for MB meas read from file, 0=fixed dates.  datesfromfileyes\n', CC('datesfromfileyes'))];
     ostr = [ostr sprintf('%s    %%file containing the dates of massbal meas.  namedatesmassbal\n', CC('namedatesmassbal'))];
     ostr = [ostr sprintf('%i    %% vertical extent of elevation bands (m) for mass balance profiles.  beltwidth\n', CC('beltwidth'))];
@@ -100,7 +100,8 @@ function ostr = mapToDegrees(CC)
     ostr = [ostr sprintf('%s    %%name of DTM aspect.  namedgmaspec\n', CC('namedgmaspect'))];
     ostr = [ostr sprintf('%s    %%name of DTM sky view factor.  namedgmskyview\n', CC('namedgmskyview'))];
     ostr = [ostr sprintf('%s    %%name of DTM firnarea.  namedgmfirn\n', CC('namedgmfirn'))];
-    ostr = [ostr sprintf('%s   %%name of DTM initial snow cover.  nameinitialsnow \n', CC('nameinitialsnow'))];
+    ostr = [ostr sprintf('%s    %%name of DTM initial snow cover.  nameinitialsnow \n', CC('nameinitialsnow'))];
+    ostr = [ostr sprintf('%s    %%name of DTM ice thickness. namedgmthickness\n', CC('namedgmthickness'))];
     ostr = [ostr sprintf('%s    %%name of climate data file.  nameklima\n', CC('nameklima'))];
 
     ostr = [ostr '%********* 5.) GRID INFORMATION***************************************' char(10)];
