@@ -44,7 +44,7 @@ function ostr = mapToDegrees(CC)
     ostr = [ostr sprintf('%i    %%output grid of winter mass balance yes=1, no=0.  winterbalyes\n', CC('winterbalyes'))];
     ostr = [ostr sprintf('%i    %%output grid of summer mass balance, yes=1, no=0.  summerbalyes\n', CC('summerbalyes'))];
     ostr = [ostr sprintf('%i    %%day of year when winter starts. Summer ends day before. winterjdbeg\n', CC('winterjdbeg'))];
-    ostr = [ostr sprintf('%i    %%day of year when winter ends. Summer starts next day. winterjdend\n', CC('winterjdbend'))];
+    ostr = [ostr sprintf('%i    %%day of year when winter ends. Summer starts next day. winterjdend\n', CC('winterjdend'))];
     ostr = [ostr sprintf('%i    %%1=dates for MB meas read from file, 0=fixed dates.  datesfromfileyes\n', CC('datesfromfileyes'))];
     ostr = [ostr sprintf('%s    %%file containing the dates of massbal meas.  namedatesmassbal\n', CC('namedatesmassbal'))];
     ostr = [ostr sprintf('%i    %% vertical extent of elevation bands (m) for mass balance profiles.  beltwidth\n', CC('beltwidth'))];
